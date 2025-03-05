@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
+import { motion, AnimatePresence } from "framer-motion";
 import { apiRequest } from "@/lib/queryClient";
+import { CheckCircle2, XCircle } from "lucide-react";
 
 const quizQuestions = [
   {
@@ -52,7 +55,11 @@ const quizQuestions = [
 export function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [showResult, setShowResult] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
   const { toast } = useToast();
+
+  const progress = ((currentQuestion + 1) / quizQuestions.length) * 100;
 
   const handleSubmit = async () => {
     if (selectedOption === null) {
@@ -70,27 +77,26 @@ export function Quiz() {
         isCorrect: selectedOption === quizQuestions[currentQuestion].correctAnswer,
       });
 
-      const isCorrect = selectedOption === quizQuestions[currentQuestion].correctAnswer;
+      const correct = selectedOption === quizQuestions[currentQuestion].correctAnswer;
+      setIsCorrect(correct);
+      setShowResult(true);
 
-      toast({
-        title: isCorrect ? "Correct! 🎉" : "Incorrect",
-        description: isCorrect 
-          ? "Great job! Let's try another question."
-          : "Don't worry, learning about AI takes time. Try again!",
-        variant: isCorrect ? "default" : "destructive",
-      });
+      setTimeout(() => {
+        if (currentQuestion < quizQuestions.length - 1) {
+          setCurrentQuestion(prev => prev + 1);
+          setSelectedOption(null);
+          setShowResult(false);
+        } else {
+          toast({
+            title: "Quiz completed! 🎉",
+            description: "You've completed all the questions. Feel free to start over!",
+          });
+          setCurrentQuestion(0);
+          setSelectedOption(null);
+          setShowResult(false);
+        }
+      }, 1500);
 
-      if (currentQuestion < quizQuestions.length - 1) {
-        setCurrentQuestion(prev => prev + 1);
-        setSelectedOption(null);
-      } else {
-        toast({
-          title: "Quiz completed!",
-          description: "You've completed all the questions. Feel free to start over!",
-        });
-        setCurrentQuestion(0);
-        setSelectedOption(null);
-      }
     } catch (error) {
       toast({
         title: "Error submitting answer",
@@ -102,35 +108,65 @@ export function Quiz() {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>Question {currentQuestion + 1} of {quizQuestions.length}</CardTitle>
+        <div className="space-y-2">
+          <CardTitle className="text-2xl">Question {currentQuestion + 1} of {quizQuestions.length}</CardTitle>
+          <Progress value={progress} className="h-2" />
+        </div>
       </CardHeader>
       <CardContent>
-        <div className="space-y-6">
-          <div className="text-lg font-medium">
-            {quizQuestions[currentQuestion].question}
-          </div>
-          <RadioGroup
-            value={selectedOption?.toString()}
-            onValueChange={(value) => setSelectedOption(parseInt(value))}
-            className="space-y-4"
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentQuestion}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="space-y-6"
           >
-            {quizQuestions[currentQuestion].options.map((option, index) => (
-              <div key={index} className="flex items-center space-x-3">
-                <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                <Label htmlFor={`option-${index}`} className="text-base">
-                  {option}
-                </Label>
-              </div>
-            ))}
-          </RadioGroup>
-          <Button 
-            onClick={handleSubmit} 
-            className="w-full"
-            size="lg"
-          >
-            Submit Answer
-          </Button>
-        </div>
+            <div className="text-xl font-medium mb-6">
+              {quizQuestions[currentQuestion].question}
+            </div>
+            <RadioGroup
+              value={selectedOption?.toString()}
+              onValueChange={(value) => setSelectedOption(parseInt(value))}
+              className="space-y-4"
+            >
+              {quizQuestions[currentQuestion].options.map((option, index) => (
+                <div
+                  key={index}
+                  className={`relative flex items-center space-x-3 rounded-lg border p-4 transition-colors
+                    ${showResult && index === quizQuestions[currentQuestion].correctAnswer
+                      ? 'bg-green-50 border-green-200'
+                      : showResult && index === selectedOption && !isCorrect
+                      ? 'bg-red-50 border-red-200'
+                      : 'hover:bg-accent'
+                    }`}
+                >
+                  <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                  <Label
+                    htmlFor={`option-${index}`}
+                    className="flex-grow text-base cursor-pointer"
+                  >
+                    {option}
+                  </Label>
+                  {showResult && index === quizQuestions[currentQuestion].correctAnswer && (
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                  )}
+                  {showResult && index === selectedOption && !isCorrect && (
+                    <XCircle className="w-5 h-5 text-red-500" />
+                  )}
+                </div>
+              ))}
+            </RadioGroup>
+            <Button 
+              onClick={handleSubmit} 
+              className="w-full mt-6"
+              size="lg"
+              disabled={selectedOption === null || showResult}
+            >
+              Submit Answer
+            </Button>
+          </motion.div>
+        </AnimatePresence>
       </CardContent>
     </Card>
   );
