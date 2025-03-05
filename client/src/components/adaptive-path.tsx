@@ -27,7 +27,7 @@ interface Topic {
       title: string;
       type: "video" | "article" | "tutorial";
       description: string;
-      link?: string; // Added link property
+      link?: string;
     }[];
   };
 }
@@ -547,11 +547,11 @@ export function AdaptivePath() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-8 pt-16 overflow-y-auto"
             onClick={() => setSelectedTopic(null)}
           >
             <Card
-              className="w-full max-w-3xl"
+              className="w-full max-w-3xl my-8"
               onClick={(e) => e.stopPropagation()}
             >
               <CardHeader>
@@ -635,7 +635,7 @@ export function AdaptivePath() {
                   <h3 className="text-lg font-semibold mb-2">Learning Resources</h3>
                   <div className="space-y-2">
                     {selectedTopic.content.resources.map((resource, index) => (
-                      <a href={resource.link} target="_blank" rel="noopener noreferrer" > {/* Added link and target */}
+                      <a href={resource.link} target="_blank" rel="noopener noreferrer">
                         <div
                           key={index}
                           className="flex items-start gap-2 p-3 rounded-lg bg-muted"
@@ -654,10 +654,6 @@ export function AdaptivePath() {
                     ))}
                   </div>
                 </div>
-
-                <Button className="w-full" size="lg">
-                  Start Learning
-                </Button>
               </CardContent>
             </Card>
           </motion.div>
