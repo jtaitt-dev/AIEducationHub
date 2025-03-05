@@ -21,6 +21,20 @@
     );
   }
 
+  /* Animation keyframes for floating particles */
+  @keyframes float {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(100px, 100px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  .animate-float {
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .backdrop-blur-subtle {
+    backdrop-filter: blur(8px);
+  }
   .card-hover {
     @apply transition-all duration-300;
   }
