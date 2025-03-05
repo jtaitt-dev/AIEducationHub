@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { debounce } from "@/lib/utils";
 
 interface ParticleSettings {
   count: number;
@@ -37,18 +36,10 @@ export function ParticleControls({ onSettingsChange }: ParticleControlsProps) {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  // Debounce the settings change to prevent too frequent updates
-  const debouncedSettingsChange = useCallback(
-    debounce((newSettings: ParticleSettings) => {
-      onSettingsChange(newSettings);
-    }, 100),
-    []
-  );
-
   const handleChange = (key: keyof ParticleSettings, value: number | string) => {
     const newSettings = { ...settings, [key]: value };
     setSettings(newSettings);
-    debouncedSettingsChange(newSettings);
+    onSettingsChange(newSettings);
   };
 
   return (
