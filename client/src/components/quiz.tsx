@@ -23,7 +23,8 @@ const quizQuestions = [
     explanation: {
       correct: "AI is software that can learn and adapt from data and experience. For example, when you use a smart email filter that learns to identify spam over time - that's AI in action!",
       incorrect: "Think of AI as being like a student that learns from examples. Just as a student improves by studying patterns and examples, AI software learns from data to make better decisions over time."
-    }
+    },
+    relatedPath: "/learning-path#ai-basics"
   },
   {
     question: "Which of the following is a real-world application of AI?",
@@ -37,7 +38,8 @@ const quizQuestions = [
     explanation: {
       correct: "Virtual assistants like Siri or Alexa use AI to understand and respond to human language naturally. They can learn from conversations and improve their responses over time.",
       incorrect: "While automatic coffee makers and calculators are useful tools, they follow fixed programming. AI applications like virtual assistants can understand context, learn, and adapt to different situations."
-    }
+    },
+    relatedPath: "/learning-path#ai-applications"
   },
   {
     question: "How does AI improve business operations?",
@@ -51,7 +53,8 @@ const quizQuestions = [
     explanation: {
       correct: "AI enhances business by handling routine tasks (like sorting emails or processing invoices) and finding patterns in data that humans might miss. This frees up people to focus on more creative and strategic work.",
       incorrect: "AI's role isn't to replace humans but to assist them. For example, AI can analyze customer data to suggest improvements, while humans make the final strategic decisions."
-    }
+    },
+    relatedPath: "/learning-path#ai-applications"
   },
   {
     question: "What is machine learning in AI?",
@@ -65,7 +68,8 @@ const quizQuestions = [
     explanation: {
       correct: "Machine learning is like teaching by example. Instead of writing specific rules, we show the AI many examples, and it learns patterns. For instance, showing an AI thousands of photos of cats and dogs helps it learn to distinguish between them.",
       incorrect: "Machine learning isn't about manual programming or simple updates. It's about systems that improve automatically through experience, like how a music recommendation system gets better at suggesting songs the more you use it."
-    }
+    },
+    relatedPath: "/learning-path#ml-intro"
   },
 ];
 
@@ -91,10 +95,10 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
           "Dive into specialized areas like computer vision or NLP"
         ],
         suggestedPaths: [
-          { title: "Neural Networks", description: "Deepen your knowledge of deep learning architectures" },
-          { title: "AI Development", description: "Learn to build and deploy sophisticated AI systems" },
-          { title: "Advanced AI Concepts", description: "Explore cutting-edge research and techniques" },
-          { title: "AI for Business", description: "Learn how AI is revolutionizing various industries"}
+          { title: "Neural Networks", description: "Deepen your knowledge of deep learning architectures", path: "/learning-path#neural-networks" },
+          { title: "AI Development", description: "Learn to build and deploy sophisticated AI systems", path: "/learning-path#ai-development" },
+          { title: "Advanced AI Concepts", description: "Explore cutting-edge research and techniques", path: "/learning-path#ai-applications" },
+          { title: "AI for Business", description: "Learn how AI is revolutionizing various industries", path: "/learning-path#ai-applications"}
         ]
       };
     } else if (score >= 75) {
@@ -109,10 +113,10 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
           "Learn about data preprocessing techniques"
         ],
         suggestedPaths: [
-          { title: "Machine Learning Basics", description: "Master the fundamentals of ML algorithms" },
-          { title: "AI Applications", description: "Apply your knowledge to real-world problems" },
-          { title: "Practical Machine Learning", description: "Hands-on projects and case studies"},
-          { title: "AI for Data Science", description: "Combine AI with data analysis techniques"}
+          { title: "Machine Learning Basics", description: "Master the fundamentals of ML algorithms", path: "/learning-path#ml-intro" },
+          { title: "AI Applications", description: "Apply your knowledge to real-world problems", path: "/learning-path#ai-applications" },
+          { title: "Practical Machine Learning", description: "Hands-on projects and case studies", path: "/learning-path#ml-intro"},
+          { title: "AI for Data Science", description: "Combine AI with data analysis techniques", path: "/learning-path#neural-networks"}
         ]
       };
     } else if (score >= 50) {
@@ -127,10 +131,10 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
           "Focus on understanding data structures in AI"
         ],
         suggestedPaths: [
-          { title: "AI Fundamentals", description: "Strengthen your understanding of core AI concepts" },
-          { title: "Machine Learning Basics", description: "Build a solid foundation in ML" },
-          { title: "Introduction to AI", description: "A beginner-friendly course covering key concepts"},
-          { title: "AI and its impact on society", description: "Explore the broader implications of AI"}
+          { title: "AI Fundamentals", description: "Strengthen your understanding of core AI concepts", path: "/learning-path#ai-basics" },
+          { title: "Machine Learning Basics", description: "Build a solid foundation in ML", path: "/learning-path#ml-intro" },
+          { title: "Introduction to AI", description: "A beginner-friendly course covering key concepts", path: "/learning-path#ai-basics"},
+          { title: "AI and its impact on society", description: "Explore the broader implications of AI", path: "/learning-path#ai-ethics"}
         ]
       };
     } else {
@@ -145,10 +149,10 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
           "Focus on understanding one concept at a time"
         ],
         suggestedPaths: [
-          { title: "AI Fundamentals", description: "Start with the basics of AI" },
-          { title: "AI Ethics & Safety", description: "Understand the responsible use of AI" },
-          { title: "Beginner's Guide to AI", description: "Easy-to-understand introduction to AI for beginners"},
-          { title: "AI in Everyday Life", description: "Explore AI applications in your daily routine"}
+          { title: "AI Fundamentals", description: "Start with the basics of AI", path: "/learning-path#ai-basics" },
+          { title: "AI Ethics & Safety", description: "Understand the responsible use of AI", path: "/learning-path#ai-ethics" },
+          { title: "Beginner's Guide to AI", description: "Easy-to-understand introduction to AI for beginners", path: "/learning-path#ai-basics"},
+          { title: "AI in Everyday Life", description: "Explore AI applications in your daily routine", path: "/learning-path#ai-applications"}
         ]
       };
     }
@@ -207,7 +211,7 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
           <h3 className="font-semibold text-lg">Recommended Learning Paths</h3>
           <div className="grid gap-4 md:grid-cols-2">
             {feedback.suggestedPaths.map((path, index) => (
-              <Link href={`/learning-path/${index}`} key={index}>
+              <Link href={path.path} key={index}>
                 <Card className="transition-all duration-300 hover:shadow-lg">
                   <CardContent className="pt-6">
                     <h4 className="font-medium text-lg mb-2">{path.title}</h4>
