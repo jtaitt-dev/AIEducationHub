@@ -6,6 +6,7 @@ import { Navigation } from "@/components/navigation";
 import Home from "@/pages/home";
 import ChatDemo from "@/pages/chat-demo";
 import BestPractices from "@/pages/best-practices";
+import LearningPath from "@/pages/learning-path";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -14,6 +15,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/chat-demo" component={ChatDemo} />
       <Route path="/best-practices" component={BestPractices} />
+      <Route path="/learning-path" component={LearningPath} />
       <Route component={NotFound} />
     </Switch>
   );
