@@ -17,7 +17,36 @@ const quizQuestions = [
     ],
     correctAnswer: 1,
   },
-  // Add more questions as needed
+  {
+    question: "Which of the following is a real-world application of AI?",
+    options: [
+      "Making coffee automatically",
+      "Natural language processing in virtual assistants",
+      "Basic calculator functions",
+      "Regular email sending",
+    ],
+    correctAnswer: 1,
+  },
+  {
+    question: "How does AI improve business operations?",
+    options: [
+      "By replacing all human workers",
+      "By automating repetitive tasks and providing insights",
+      "By making the office look more modern",
+      "By increasing electricity consumption",
+    ],
+    correctAnswer: 1,
+  },
+  {
+    question: "What is machine learning in AI?",
+    options: [
+      "Teaching robots to walk",
+      "Programming computers manually",
+      "Systems learning from data and experience",
+      "Installing new software updates",
+    ],
+    correctAnswer: 2,
+  },
 ];
 
 export function Quiz() {
@@ -41,15 +70,25 @@ export function Quiz() {
         isCorrect: selectedOption === quizQuestions[currentQuestion].correctAnswer,
       });
 
+      const isCorrect = selectedOption === quizQuestions[currentQuestion].correctAnswer;
+
       toast({
-        title: "Answer submitted!",
-        description: selectedOption === quizQuestions[currentQuestion].correctAnswer
-          ? "Correct!"
-          : "Incorrect. Try again!",
+        title: isCorrect ? "Correct! 🎉" : "Incorrect",
+        description: isCorrect 
+          ? "Great job! Let's try another question."
+          : "Don't worry, learning about AI takes time. Try again!",
+        variant: isCorrect ? "default" : "destructive",
       });
 
       if (currentQuestion < quizQuestions.length - 1) {
         setCurrentQuestion(prev => prev + 1);
+        setSelectedOption(null);
+      } else {
+        toast({
+          title: "Quiz completed!",
+          description: "You've completed all the questions. Feel free to start over!",
+        });
+        setCurrentQuestion(0);
         setSelectedOption(null);
       }
     } catch (error) {
@@ -63,7 +102,7 @@ export function Quiz() {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>Test Your Knowledge</CardTitle>
+        <CardTitle>Question {currentQuestion + 1} of {quizQuestions.length}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
@@ -73,15 +112,22 @@ export function Quiz() {
           <RadioGroup
             value={selectedOption?.toString()}
             onValueChange={(value) => setSelectedOption(parseInt(value))}
+            className="space-y-4"
           >
             {quizQuestions[currentQuestion].options.map((option, index) => (
-              <div key={index} className="flex items-center space-x-2">
+              <div key={index} className="flex items-center space-x-3">
                 <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                <Label htmlFor={`option-${index}`}>{option}</Label>
+                <Label htmlFor={`option-${index}`} className="text-base">
+                  {option}
+                </Label>
               </div>
             ))}
           </RadioGroup>
-          <Button onClick={handleSubmit} className="w-full">
+          <Button 
+            onClick={handleSubmit} 
+            className="w-full"
+            size="lg"
+          >
             Submit Answer
           </Button>
         </div>
