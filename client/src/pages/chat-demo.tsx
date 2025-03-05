@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Copy, MessageSquare, ChevronRight } from "lucide-react";
@@ -163,96 +163,6 @@ Need more specific JOIN examples?`
         }
       }
     ]
-  },
-  {
-    id: "regex",
-    icon: "🔍",
-    title: "Regex Patterns",
-    description: "Get regular expressions for common patterns",
-    prompts: [
-      {
-        prompt: "How do I validate an email with regex?",
-        response: {
-          role: "assistant",
-          content: `Here's a reliable email validation regex pattern:
-
-Pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$
-
-Example usage in different languages:
-
-// JavaScript
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const isValid = emailRegex.test('user@example.com');
-
-# Python
-import re
-email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-is_valid = re.match(email_regex, 'user@example.com')
-
-The pattern breaks down as:
-• ^: Start of string
-• [a-zA-Z0-9._%+-]+: Username can contain letters, numbers, and certain special characters
-• @: Email separator
-• [a-zA-Z0-9.-]+: Domain name
-• \\.: Dot separator
-• [a-zA-Z]{2,}: Top-level domain of at least 2 characters
-• $: End of string
-
-Need help with other regex patterns?`
-        }
-      }
-    ]
-  },
-  {
-    id: "javascript",
-    icon: "🖥",
-    title: "JavaScript Code",
-    description: "Get JavaScript snippets for common tasks",
-    prompts: [
-      {
-        prompt: "How do I fetch data from an API in JavaScript?",
-        response: {
-          role: "assistant",
-          content: `Here are different ways to fetch data from an API:
-
-// Using async/await (Modern approach)
-async function fetchData() {
-  try {
-    const response = await fetch('https://api.example.com/data');
-    const data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-// Using .then() chains
-fetch('https://api.example.com/data')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
-
-// POST request with data
-async function postData(data) {
-  try {
-    const response = await fetch('https://api.example.com/post', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    });
-    const result = await response.json();
-    console.log(result);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-Need more specific API examples?`
-        }
-      }
-    ]
   }
 ];
 
@@ -265,6 +175,15 @@ export default function ChatDemo() {
   ]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { toast } = useToast();
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
@@ -314,42 +233,49 @@ export default function ChatDemo() {
 
       {/* Main chat area */}
       <div className="flex-1 flex flex-col">
-        <div className="flex-1 space-y-4 mb-4">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex group ${
-                message.role === "assistant" ? "bg-muted/50" : "bg-background"
-              } p-4 rounded-lg`}
-            >
-              <div className="w-8 mr-4 flex-shrink-0">
-                {message.role === "assistant" ? (
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <MessageSquare className="w-4 h-4 text-primary" />
-                  </div>
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
-                    <div className="w-4 h-4 rounded-full bg-secondary" />
-                  </div>
+        {/* Chat messages container with scrolling */}
+        <div className="flex-1 overflow-y-auto mb-4 pr-4 -mr-4">
+          <div className="space-y-4">
+            {messages.map((message, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className={`flex group ${
+                  message.role === "assistant" ? "bg-muted/50" : "bg-background"
+                } p-6 rounded-lg`}
+              >
+                <div className="w-8 mr-4 flex-shrink-0">
+                  {message.role === "assistant" ? (
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <MessageSquare className="w-4 h-4 text-primary" />
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+                      <div className="w-4 h-4 rounded-full bg-secondary" />
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <pre className="whitespace-pre-wrap font-sans text-sm">
+                    {message.content}
+                  </pre>
+                </div>
+                {message.role === "assistant" && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => handleCopy(message.content)}
+                  >
+                    <Copy className="w-4 h-4" />
+                  </Button>
                 )}
-              </div>
-              <div className="flex-1">
-                <pre className="whitespace-pre-wrap font-sans text-sm">
-                  {message.content}
-                </pre>
-              </div>
-              {message.role === "assistant" && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => handleCopy(message.content)}
-                >
-                  <Copy className="w-4 h-4" />
-                </Button>
-              )}
-            </div>
-          ))}
+              </motion.div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
         </div>
 
         {/* Prompt Suggestions */}
