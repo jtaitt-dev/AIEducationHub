@@ -27,6 +27,7 @@ interface Topic {
       title: string;
       type: "video" | "article" | "tutorial";
       description: string;
+      link?: string; // Added link property
     }[];
   };
 }
@@ -47,40 +48,61 @@ const topics: Topic[] = [
         "Understand what AI is and its different types",
         "Learn about the history and evolution of AI",
         "Grasp basic AI terminology and concepts",
-        "Identify different types of AI applications"
+        "Identify different types of AI applications",
+        "Understand the role of data in AI systems"
       ],
       keyTopics: [
         "Definition and Types of AI",
         "Machine Learning vs. Traditional Programming",
         "Supervised vs. Unsupervised Learning",
-        "AI Problem-Solving Approaches"
+        "AI Problem-Solving Approaches",
+        "Introduction to Neural Networks"
       ],
       realWorldApplications: [
-        "Virtual Personal Assistants",
-        "Email Spam Filters",
-        "Product Recommendations",
-        "Smart Home Devices"
+        "Virtual Personal Assistants (Siri, Alexa)",
+        "Email Spam Filters and Smart Categorization",
+        "Netflix and Spotify Recommendations",
+        "Smart Home Device Automation",
+        "Facial Recognition Systems"
       ],
       exercises: [
         {
           title: "AI Application Identification",
-          description: "Identify AI applications in your daily life and classify them by type"
+          description: "Analyze and categorize AI applications in your daily life, identifying the type of AI used in each case"
         },
         {
           title: "Problem-Solution Mapping",
-          description: "Match real-world problems with appropriate AI solutions"
+          description: "Create a mapping between real-world problems and potential AI solutions, considering ethical implications"
+        },
+        {
+          title: "AI vs Traditional Programming",
+          description: "Compare how traditional programming and AI approaches would solve the same problem"
         }
       ],
       resources: [
         {
-          title: "Introduction to AI Concepts",
+          title: "AI for Everyone by Andrew Ng",
           type: "video",
-          description: "A comprehensive overview of AI fundamentals"
+          description: "Comprehensive Coursera course covering AI basics",
+          link: "https://www.coursera.org/learn/ai-for-everyone"
         },
         {
-          title: "AI in Everyday Life",
+          title: "Elements of AI",
+          type: "tutorial",
+          description: "Free online course covering AI fundamentals",
+          link: "https://www.elementsofai.com/"
+        },
+        {
+          title: "Understanding AI: A Beginner's Guide",
           type: "article",
-          description: "Explore how AI is already impacting our daily activities"
+          description: "MIT Technology Review's introduction to AI concepts",
+          link: "https://www.technologyreview.com/artificial-intelligence/"
+        },
+        {
+          title: "Practical AI Applications",
+          type: "video",
+          description: "Google AI's overview of real-world AI applications",
+          link: "https://ai.google/education/"
         }
       ]
     }
@@ -97,43 +119,64 @@ const topics: Topic[] = [
     content: {
       overview: "Discover the foundations of machine learning, including key algorithms, data preprocessing, and model evaluation techniques. Learn how machines can learn from data to make predictions and decisions.",
       objectives: [
-        "Understand basic ML algorithms and their applications",
-        "Learn about data preparation and preprocessing",
-        "Master fundamental ML terminology",
-        "Implement simple ML models"
+        "Master fundamental ML concepts and terminology",
+        "Understand different types of learning algorithms",
+        "Learn data preparation and preprocessing techniques",
+        "Grasp model evaluation and validation methods",
+        "Implement basic ML models using Python"
       ],
       keyTopics: [
-        "Types of Machine Learning",
-        "Basic Classification Algorithms",
-        "Regression Analysis",
-        "Model Evaluation Metrics"
+        "Supervised vs Unsupervised Learning",
+        "Classification and Regression",
+        "Model Training and Validation",
+        "Feature Engineering",
+        "Basic Neural Networks"
       ],
       realWorldApplications: [
-        "Customer Churn Prediction",
+        "Customer Churn Prediction Systems",
         "Credit Card Fraud Detection",
-        "Image Classification",
-        "Weather Forecasting"
+        "Medical Diagnosis Assistance",
+        "Stock Market Prediction",
+        "Natural Language Processing"
       ],
       exercises: [
         {
-          title: "Dataset Exploration",
-          description: "Analyze a real-world dataset and identify patterns"
+          title: "Iris Classification",
+          description: "Build a simple classifier using the famous Iris dataset to understand basic ML concepts"
         },
         {
-          title: "Simple Classification",
-          description: "Build a basic classifier for a common ML problem"
+          title: "House Price Prediction",
+          description: "Develop a regression model to predict house prices based on various features"
+        },
+        {
+          title: "Customer Segmentation",
+          description: "Use clustering algorithms to segment customers based on their behavior"
         }
       ],
       resources: [
         {
-          title: "ML Algorithm Deep Dive",
+          title: "Machine Learning Crash Course",
           type: "tutorial",
-          description: "Step-by-step guide to implementing ML algorithms"
+          description: "Google's comprehensive ML course with TensorFlow",
+          link: "https://developers.google.com/machine-learning/crash-course"
         },
         {
-          title: "Data Preprocessing Guide",
+          title: "Introduction to Statistical Learning",
           type: "article",
-          description: "Learn essential data preparation techniques"
+          description: "Free textbook covering ML fundamentals",
+          link: "https://www.statlearning.com/"
+        },
+        {
+          title: "Practical Machine Learning Tutorial",
+          type: "video",
+          description: "Stanford's CS229 Machine Learning Course",
+          link: "https://www.youtube.com/watch?v=jGwO_UgTS7I"
+        },
+        {
+          title: "Scikit-learn Tutorials",
+          type: "tutorial",
+          description: "Official scikit-learn tutorials for practical ML",
+          link: "https://scikit-learn.org/stable/tutorial/index.html"
         }
       ]
     }
@@ -148,45 +191,66 @@ const topics: Topic[] = [
     estimatedHours: 8,
     completionRate: 0,
     content: {
-      overview: "Explore the fascinating world of neural networks and deep learning. Learn about different network architectures, training techniques, and applications in solving complex problems.",
+      overview: "Dive deep into neural networks and deep learning. Learn about different architectures, training techniques, and applications in solving complex problems.",
       objectives: [
-        "Understand neural network architecture and components",
-        "Learn about different types of neural networks",
-        "Master backpropagation and training processes",
-        "Implement basic neural networks"
+        "Understand neural network architecture and mathematics",
+        "Master different types of neural networks",
+        "Learn backpropagation and optimization",
+        "Implement deep learning models",
+        "Understand GPU acceleration and distributed training"
       ],
       keyTopics: [
-        "Artificial Neural Networks (ANN)",
+        "Deep Neural Networks",
         "Convolutional Neural Networks (CNN)",
         "Recurrent Neural Networks (RNN)",
-        "Activation Functions and Layers"
+        "Transformers and Attention Mechanisms",
+        "Transfer Learning"
       ],
       realWorldApplications: [
-        "Computer Vision Systems",
+        "Image Recognition Systems",
         "Natural Language Processing",
         "Speech Recognition",
-        "Autonomous Vehicles"
+        "Autonomous Vehicles",
+        "Game Playing AI"
       ],
       exercises: [
         {
-          title: "Network Architecture Design",
-          description: "Design a neural network for a specific problem"
+          title: "MNIST Digit Recognition",
+          description: "Build a CNN to recognize handwritten digits using the MNIST dataset"
         },
         {
-          title: "Image Classification with CNNs",
-          description: "Build a simple image classifier using CNNs"
+          title: "Sentiment Analysis with RNNs",
+          description: "Create a sentiment analyzer using recurrent neural networks"
+        },
+        {
+          title: "Image Style Transfer",
+          description: "Implement neural style transfer using pretrained CNNs"
         }
       ],
       resources: [
         {
-          title: "Neural Networks Explained",
+          title: "Deep Learning Specialization",
           type: "video",
-          description: "Visual guide to understanding neural networks"
+          description: "Andrew Ng's comprehensive deep learning course",
+          link: "https://www.coursera.org/specializations/deep-learning"
         },
         {
-          title: "Deep Learning in Practice",
+          title: "Fast.ai Practical Deep Learning",
           type: "tutorial",
-          description: "Hands-on implementation of neural networks"
+          description: "Practical deep learning for coders",
+          link: "https://course.fast.ai/"
+        },
+        {
+          title: "Neural Networks and Deep Learning",
+          type: "article",
+          description: "Online book by Michael Nielsen",
+          link: "http://neuralnetworksanddeeplearning.com/"
+        },
+        {
+          title: "PyTorch Tutorials",
+          type: "tutorial",
+          description: "Official PyTorch tutorials and examples",
+          link: "https://pytorch.org/tutorials/"
         }
       ]
     }
@@ -204,42 +268,63 @@ const topics: Topic[] = [
       overview: "Understand the ethical implications of AI development and learn how to build responsible AI systems that benefit society while minimizing potential harm.",
       objectives: [
         "Understand key ethical considerations in AI",
-        "Learn about bias in AI systems",
+        "Learn about bias detection and mitigation",
         "Master responsible AI development practices",
-        "Implement fairness metrics"
+        "Implement fairness metrics and monitoring",
+        "Understand privacy and security implications"
       ],
       keyTopics: [
         "AI Bias and Fairness",
-        "Privacy and Security",
+        "Privacy and Data Protection",
         "Transparency and Explainability",
-        "Ethical Guidelines and Frameworks"
+        "Ethical Guidelines and Frameworks",
+        "Responsible AI Development"
       ],
       realWorldApplications: [
         "Fair Lending Systems",
         "Ethical Recruitment AI",
         "Responsible Content Moderation",
-        "Privacy-Preserving AI"
+        "Privacy-Preserving AI Systems",
+        "Explainable Medical AI"
       ],
       exercises: [
         {
-          title: "Bias Detection",
-          description: "Identify and measure bias in AI systems"
+          title: "Bias Detection Workshop",
+          description: "Analyze real datasets for potential biases and develop mitigation strategies"
         },
         {
           title: "Ethical Framework Development",
-          description: "Create guidelines for responsible AI development"
+          description: "Create comprehensive guidelines for responsible AI development"
+        },
+        {
+          title: "Privacy Impact Assessment",
+          description: "Conduct a privacy impact assessment for an AI system"
         }
       ],
       resources: [
         {
-          title: "AI Ethics Principles",
-          type: "article",
-          description: "Comprehensive guide to ethical AI development"
+          title: "AI Ethics: Global Perspectives",
+          type: "video",
+          description: "MIT's course on AI ethics and society",
+          link: "https://www.media.mit.edu/courses/ai-ethics/"
         },
         {
-          title: "Case Studies in AI Ethics",
-          type: "video",
-          description: "Real-world examples of ethical challenges"
+          title: "Responsible AI Practices",
+          type: "article",
+          description: "Google's AI ethics guidelines and practices",
+          link: "https://ai.google/responsibility/"
+        },
+        {
+          title: "Ethics of Artificial Intelligence",
+          type: "tutorial",
+          description: "Stanford's course on AI ethics",
+          link: "https://cs181.stanford.edu/"
+        },
+        {
+          title: "Fairness in Machine Learning",
+          type: "article",
+          description: "Research paper on fairness metrics",
+          link: "https://arxiv.org/abs/1908.09635"
         }
       ]
     }
@@ -256,43 +341,64 @@ const topics: Topic[] = [
     content: {
       overview: "Learn how to apply AI techniques to solve real-world problems. This module focuses on practical implementation and deployment of AI systems across various domains.",
       objectives: [
-        "Build end-to-end AI solutions",
-        "Integrate AI with existing systems",
-        "Deploy AI models to production",
-        "Monitor and maintain AI systems"
+        "Design and implement end-to-end AI solutions",
+        "Master system integration techniques",
+        "Learn deployment and scaling strategies",
+        "Implement monitoring and maintenance",
+        "Optimize AI system performance"
       ],
       keyTopics: [
-        "AI System Architecture",
-        "Model Deployment Strategies",
+        "System Architecture Design",
+        "API Development and Integration",
+        "Cloud Deployment Strategies",
         "Performance Optimization",
-        "System Integration"
+        "Monitoring and Maintenance"
       ],
       realWorldApplications: [
-        "Recommendation Systems",
-        "Chatbots and Virtual Assistants",
-        "Predictive Maintenance",
-        "Automated Decision Systems"
+        "E-commerce Recommendation Systems",
+        "Customer Service Chatbots",
+        "Predictive Maintenance Systems",
+        "Automated Content Generation",
+        "Real-time Analytics Platforms"
       ],
       exercises: [
         {
-          title: "Build a Recommendation System",
-          description: "Implement a complete recommendation engine"
+          title: "Recommendation System",
+          description: "Build a complete product recommendation system using collaborative filtering"
         },
         {
           title: "Chatbot Development",
-          description: "Create and deploy a functional chatbot"
+          description: "Create and deploy a customer service chatbot with natural language processing"
+        },
+        {
+          title: "Predictive Analytics",
+          description: "Develop a predictive maintenance system for industrial equipment"
         }
       ],
       resources: [
         {
-          title: "AI System Design",
+          title: "Full Stack Deep Learning",
           type: "tutorial",
-          description: "Guide to building production-ready AI systems"
+          description: "Course on deploying deep learning systems",
+          link: "https://fullstackdeeplearning.com/"
         },
         {
-          title: "Deployment Best Practices",
+          title: "Applied ML at Facebook",
           type: "article",
-          description: "Learn how to deploy AI systems effectively"
+          description: "Case study of ML applications at scale",
+          link: "https://engineering.fb.com/ml-applications/"
+        },
+        {
+          title: "Building ML Powered Applications",
+          type: "video",
+          description: "O'Reilly course on practical ML applications",
+          link: "https://learning.oreilly.com/library/view/building-machine-learning/9781492045106/"
+        },
+        {
+          title: "MLOps Best Practices",
+          type: "tutorial",
+          description: "Google Cloud's guide to ML operations",
+          link: "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning"
         }
       ]
     }
@@ -309,43 +415,64 @@ const topics: Topic[] = [
     content: {
       overview: "Master the development lifecycle of AI projects, from conception to deployment. Learn best practices, tools, and frameworks used in professional AI development.",
       objectives: [
-        "Master AI development workflows",
-        "Learn version control for AI",
-        "Implement CI/CD for AI projects",
-        "Optimize AI system performance"
+        "Master modern AI development workflows",
+        "Implement CI/CD for ML projects",
+        "Learn version control for AI models",
+        "Understand distributed training",
+        "Master debugging and optimization"
       ],
       keyTopics: [
-        "Development Environments",
-        "Version Control for AI",
+        "Development Environment Setup",
+        "Version Control and MLflow",
         "Testing AI Systems",
-        "Performance Optimization"
+        "Distributed Training",
+        "Model Optimization"
       ],
       realWorldApplications: [
-        "MLOps Pipelines",
-        "Automated Model Training",
-        "Model Versioning",
-        "System Monitoring"
+        "Automated ML Pipelines",
+        "Model Registry Systems",
+        "A/B Testing Frameworks",
+        "Feature Stores",
+        "Model Monitoring Systems"
       ],
       exercises: [
         {
-          title: "CI/CD Pipeline Setup",
-          description: "Build an automated AI deployment pipeline"
+          title: "MLOps Pipeline",
+          description: "Build a complete CI/CD pipeline for ML models using GitHub Actions"
         },
         {
-          title: "Performance Optimization",
-          description: "Optimize an AI system for production"
+          title: "Model Version Control",
+          description: "Implement version control for ML models using DVC and Git"
+        },
+        {
+          title: "Distributed Training",
+          description: "Set up distributed training using PyTorch Lightning"
         }
       ],
       resources: [
         {
-          title: "Professional AI Development",
+          title: "MLOps Specialization",
           type: "tutorial",
-          description: "Complete guide to AI development practices"
+          description: "DeepLearning.AI's MLOps course",
+          link: "https://www.coursera.org/specializations/mlops-machine-learning-operations"
         },
         {
-          title: "MLOps Best Practices",
+          title: "Machine Learning Engineering",
+          type: "article",
+          description: "Comprehensive book on ML engineering",
+          link: "http://www.mlebook.com/"
+        },
+        {
+          title: "Distributed Training with PyTorch",
           type: "video",
-          description: "Learn about managing AI systems in production"
+          description: "PyTorch's official distributed training tutorial",
+          link: "https://pytorch.org/tutorials/intermediate/ddp_tutorial.html"
+        },
+        {
+          title: "ML Testing Guide",
+          type: "article",
+          description: "Google's guide to testing ML systems",
+          link: "https://developers.google.com/machine-learning/testing-debugging"
         }
       ]
     }
@@ -508,20 +635,22 @@ export function AdaptivePath() {
                   <h3 className="text-lg font-semibold mb-2">Learning Resources</h3>
                   <div className="space-y-2">
                     {selectedTopic.content.resources.map((resource, index) => (
-                      <div
-                        key={index}
-                        className="flex items-start gap-2 p-3 rounded-lg bg-muted"
-                      >
-                        <div className="capitalize text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                          {resource.type}
+                      <a href={resource.link} target="_blank" rel="noopener noreferrer" > {/* Added link and target */}
+                        <div
+                          key={index}
+                          className="flex items-start gap-2 p-3 rounded-lg bg-muted"
+                        >
+                          <div className="capitalize text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                            {resource.type}
+                          </div>
+                          <div>
+                            <h4 className="font-medium">{resource.title}</h4>
+                            <p className="text-sm text-muted-foreground">
+                              {resource.description}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <h4 className="font-medium">{resource.title}</h4>
-                          <p className="text-sm text-muted-foreground">
-                            {resource.description}
-                          </p>
-                        </div>
-                      </div>
+                      </a>
                     ))}
                   </div>
                 </div>
