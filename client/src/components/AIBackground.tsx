@@ -1,5 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { ParticleControls } from './ParticleControls';
+
+interface ParticleSettings {
+  count: number;
+  size: number;
+  speed: number;
+  color: string;
+  opacity: number;
+}
 
 export function AIBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -10,6 +19,14 @@ export function AIBackground() {
     particles: THREE.Points;
     frameId: number | null;
   } | null>(null);
+
+  const [settings, setSettings] = useState<ParticleSettings>({
+    count: 2000,
+    size: 0.03,
+    speed: 1,
+    color: "#0066cc",
+    opacity: 0.8,
+  });
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -32,11 +49,10 @@ export function AIBackground() {
 
     // Create particles
     const geometry = new THREE.BufferGeometry();
-    const count = 2000;
-    const positions = new Float32Array(count * 3);
-    const initialY = new Float32Array(count);
+    const positions = new Float32Array(settings.count * 3);
+    const initialY = new Float32Array(settings.count);
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < settings.count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 10;     // x
       positions[i * 3 + 1] = (Math.random() - 0.5) * 10; // y
       positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z
@@ -47,11 +63,11 @@ export function AIBackground() {
     geometry.setAttribute('initialY', new THREE.BufferAttribute(initialY, 1));
 
     const material = new THREE.PointsMaterial({
-      size: 0.03,
+      size: settings.size,
       sizeAttenuation: true,
       transparent: true,
-      color: new THREE.Color(0x0066cc), // PlayStation blue
-      opacity: 0.8,
+      color: new THREE.Color(settings.color),
+      opacity: settings.opacity,
       depthWrite: false,
     });
 
@@ -65,9 +81,9 @@ export function AIBackground() {
 
       const positions = particles.geometry.attributes.position.array as Float32Array;
       const initialY = particles.geometry.attributes.initialY.array as Float32Array;
-      const time = Date.now() * 0.001;
+      const time = Date.now() * 0.001 * settings.speed;
 
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < settings.count; i++) {
         const ix = i * 3;
         const x = positions[ix];
 
@@ -78,7 +94,7 @@ export function AIBackground() {
       }
 
       particles.geometry.attributes.position.needsUpdate = true;
-      particles.rotation.y += 0.0002; // Very slow rotation for added depth
+      particles.rotation.y += 0.0002 * settings.speed; // Very slow rotation for added depth
 
       renderer.render(scene, camera);
     };
@@ -118,13 +134,16 @@ export function AIBackground() {
       geometry.dispose();
       material.dispose();
     };
-  }, []);
+  }, [settings]); // Re-create scene when settings change
 
   return (
-    <div 
-      ref={containerRef} 
-      className="absolute inset-0 -z-10"
-      style={{ pointerEvents: 'none' }}
-    />
+    <>
+      <div 
+        ref={containerRef} 
+        className="absolute inset-0 -z-10"
+        style={{ pointerEvents: 'none' }}
+      />
+      <ParticleControls onSettingsChange={setSettings} />
+    </>
   );
 }
