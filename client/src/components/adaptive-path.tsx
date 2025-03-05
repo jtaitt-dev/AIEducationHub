@@ -59,24 +59,24 @@ const topics: Topic[] = [
         "Introduction to Neural Networks"
       ],
       realWorldApplications: [
-        "Virtual Personal Assistants (Siri, Alexa)",
-        "Email Spam Filters and Smart Categorization",
-        "Netflix and Spotify Recommendations",
-        "Smart Home Device Automation",
-        "Facial Recognition Systems"
+        "Virtual Personal Assistants (Siri, Alexa) - Understanding how they process and respond to voice commands",
+        "Email Spam Filters - Learning how AI automatically categorizes and filters unwanted emails",
+        "Netflix Recommendations - Exploring how AI analyzes viewing history to suggest new shows",
+        "Smart Home Automation - See how AI adapts to your daily routines",
+        "Face Recognition - Understanding how phones and security systems recognize faces"
       ],
       exercises: [
         {
-          title: "AI Application Identification",
-          description: "Analyze and categorize AI applications in your daily life, identifying the type of AI used in each case"
+          title: "AI in Daily Life Hunt",
+          description: "Create a diary of AI encounters in your daily routine: Document 5 interactions with AI systems (e.g., social media feeds, navigation apps, smart device suggestions). For each, identify the type of AI and how it's helping you."
         },
         {
-          title: "Problem-Solution Mapping",
-          description: "Create a mapping between real-world problems and potential AI solutions, considering ethical implications"
+          title: "Traditional vs AI Solutions",
+          description: "Compare how a traditional program vs an AI would solve these tasks: 1) Identifying cats in photos, 2) Translating text, 3) Recommending movies. Focus on understanding the key differences in approach."
         },
         {
-          title: "AI vs Traditional Programming",
-          description: "Compare how traditional programming and AI approaches would solve the same problem"
+          title: "AI Decision Tree",
+          description: "Build a simple decision tree for a morning routine assistant: Create a flowchart showing how an AI assistant would help plan your morning based on factors like weather, calendar, and traffic."
         }
       ],
       resources: [
@@ -99,10 +99,10 @@ const topics: Topic[] = [
           link: "https://www.technologyreview.com/artificial-intelligence/"
         },
         {
-          title: "Practical AI Applications",
-          type: "video",
-          description: "Google AI's overview of real-world AI applications",
-          link: "https://ai.google/education/"
+          title: "AI Experiments with Google",
+          type: "tutorial",
+          description: "Interactive experiments to understand AI concepts",
+          link: "https://experiments.withgoogle.com/collection/ai"
         }
       ]
     }
@@ -126,31 +126,31 @@ const topics: Topic[] = [
         "Implement basic ML models using Python"
       ],
       keyTopics: [
-        "Supervised vs Unsupervised Learning",
-        "Classification and Regression",
-        "Model Training and Validation",
-        "Feature Engineering",
-        "Basic Neural Networks"
+        "Types of Machine Learning: Understanding Supervised, Unsupervised, and Reinforcement Learning",
+        "Data Preprocessing: Cleaning, Normalization, and Feature Engineering",
+        "Basic ML Algorithms: Linear Regression, Decision Trees, and k-Means Clustering",
+        "Model Evaluation: Accuracy, Precision, Recall, and Cross-validation",
+        "Introduction to Neural Networks: Perceptrons and Basic Architectures"
       ],
       realWorldApplications: [
-        "Customer Churn Prediction Systems",
-        "Credit Card Fraud Detection",
-        "Medical Diagnosis Assistance",
-        "Stock Market Prediction",
-        "Natural Language Processing"
+        "Customer Behavior Analysis: Predicting which customers might leave your service",
+        "Medical Diagnosis: How ML helps doctors detect diseases in medical images",
+        "Financial Forecasting: Predicting stock prices using historical data",
+        "Weather Prediction: Using ML to forecast weather patterns",
+        "E-commerce: Product recommendations based on shopping history"
       ],
       exercises: [
         {
-          title: "Iris Classification",
-          description: "Build a simple classifier using the famous Iris dataset to understand basic ML concepts"
+          title: "House Price Predictor",
+          description: "Build a simple linear regression model to predict house prices. Step by step: 1) Load and explore housing data, 2) Identify key features, 3) Create and train model, 4) Make predictions and evaluate accuracy."
         },
         {
-          title: "House Price Prediction",
-          description: "Develop a regression model to predict house prices based on various features"
+          title: "Customer Segmentation Project",
+          description: "Use k-means clustering to group customers based on their shopping behavior. Practice data preprocessing, feature selection, and interpreting cluster results."
         },
         {
-          title: "Customer Segmentation",
-          description: "Use clustering algorithms to segment customers based on their behavior"
+          title: "Spam Detection System",
+          description: "Create a basic email spam classifier using text analysis. Learn about text preprocessing, feature extraction, and model evaluation metrics."
         }
       ],
       resources: [
@@ -161,22 +161,22 @@ const topics: Topic[] = [
           link: "https://developers.google.com/machine-learning/crash-course"
         },
         {
-          title: "Introduction to Statistical Learning",
-          type: "article",
-          description: "Free textbook covering ML fundamentals",
-          link: "https://www.statlearning.com/"
-        },
-        {
           title: "Practical Machine Learning Tutorial",
           type: "video",
           description: "Stanford's CS229 Machine Learning Course",
           link: "https://www.youtube.com/watch?v=jGwO_UgTS7I"
         },
         {
-          title: "Scikit-learn Tutorials",
+          title: "Kaggle Learn",
           type: "tutorial",
-          description: "Official scikit-learn tutorials for practical ML",
-          link: "https://scikit-learn.org/stable/tutorial/index.html"
+          description: "Hands-on ML tutorials with real datasets",
+          link: "https://www.kaggle.com/learn"
+        },
+        {
+          title: "ML for Beginners",
+          type: "tutorial",
+          description: "Microsoft's ML curriculum with practical examples",
+          link: "https://github.com/microsoft/ML-For-Beginners"
         }
       ]
     }
