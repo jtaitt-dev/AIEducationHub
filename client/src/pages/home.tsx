@@ -1,10 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Quiz } from "@/components/quiz";
-import { Brain, Cpu, Bot, ShieldCheck, ChevronDown } from "lucide-react";
+import { ConceptCard } from "@/components/concept-card";
+import { Brain, Cpu, Bot, ShieldCheck, ChevronDown, Lightbulb, Dna } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const sections = useRef<HTMLElement[]>([]);
+  const [activeSection, setActiveSection] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -12,10 +15,12 @@ export default function Home() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
+            const index = sections.current.findIndex(section => section === entry.target);
+            if (index !== -1) setActiveSection(index);
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.3 }
     );
 
     sections.current.forEach((section) => {
@@ -25,18 +30,90 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  const aiConcepts = [
+    {
+      title: "What is AI?",
+      icon: <Brain className="h-8 w-8 text-primary" />,
+      description: "Artificial Intelligence refers to computer systems that can perform tasks typically requiring human intelligence.",
+      details: [
+        "Neural networks mimic human brain function",
+        "Machine learning enables pattern recognition",
+        "Natural language processing powers communication",
+        "Computer vision enables visual understanding"
+      ]
+    },
+    {
+      title: "AI Applications",
+      icon: <Bot className="h-8 w-8 text-primary" />,
+      description: "AI is revolutionizing various industries and aspects of daily life with innovative solutions.",
+      details: [
+        "Healthcare: Disease diagnosis and treatment planning",
+        "Finance: Fraud detection and risk assessment",
+        "Education: Personalized learning platforms",
+        "Environment: Climate modeling and conservation"
+      ]
+    }
+  ];
+
+  const businessApplications = [
+    {
+      title: "Workflow Automation",
+      icon: <Cpu className="h-8 w-8 text-primary" />,
+      description: "AI streamlines business operations through intelligent automation and optimization.",
+      details: [
+        "24/7 customer service via chatbots",
+        "Predictive maintenance systems",
+        "Automated document processing",
+        "Smart inventory management"
+      ]
+    },
+    {
+      title: "Data Analytics",
+      icon: <ShieldCheck className="h-8 w-8 text-primary" />,
+      description: "AI enhances decision-making through advanced data analysis and insights.",
+      details: [
+        "Real-time market analysis",
+        "Customer behavior prediction",
+        "Performance optimization",
+        "Risk assessment automation"
+      ]
+    }
+  ];
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-[80vh] hero-gradient flex items-center justify-center overflow-hidden">
         <div className="container py-20 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-5xl sm:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60"
+          >
             Understanding AI & ChatGPT
-          </h1>
-          <p className="text-xl sm:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-xl sm:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto"
+          >
             Discover how Artificial Intelligence is transforming our world and learn to harness its potential responsibly and effectively.
-          </p>
+          </motion.p>
           <ChevronDown className="w-8 h-8 mx-auto text-primary animate-bounce" />
+        </div>
+
+        {/* Progress Indicator */}
+        <div className="fixed right-4 top-1/2 -translate-y-1/2 space-y-2">
+          {[0, 1, 2].map((index) => (
+            <div
+              key={index}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                activeSection === index ? 'bg-primary scale-125' : 'bg-primary/20'
+              }`}
+            />
+          ))}
         </div>
       </section>
 
@@ -50,45 +127,9 @@ export default function Home() {
         >
           <h2 className="text-4xl font-bold mb-12 text-center">Understanding AI</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="card-hover stagger-1">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="icon-container">
-                    <Brain className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-semibold">What is AI?</h3>
-                </div>
-                <p className="text-muted-foreground mb-4">
-                  Artificial Intelligence (AI) refers to computer systems that can perform tasks
-                  typically requiring human intelligence. These include:
-                </p>
-                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                  <li>Learning from experience and adapting</li>
-                  <li>Understanding and processing language</li>
-                  <li>Recognizing patterns and making decisions</li>
-                  <li>Solving complex problems</li>
-                </ul>
-              </CardContent>
-            </Card>
-            <Card className="card-hover stagger-2">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="icon-container">
-                    <Bot className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-semibold">AI Applications</h3>
-                </div>
-                <p className="text-muted-foreground mb-4">
-                  AI is revolutionizing various industries and aspects of daily life:
-                </p>
-                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                  <li>Healthcare diagnosis and treatment planning</li>
-                  <li>Financial fraud detection and risk assessment</li>
-                  <li>Educational personalized learning systems</li>
-                  <li>Environmental conservation and climate modeling</li>
-                </ul>
-              </CardContent>
-            </Card>
+            {aiConcepts.map((concept, index) => (
+              <ConceptCard key={index} {...concept} />
+            ))}
           </div>
         </section>
 
@@ -101,44 +142,9 @@ export default function Home() {
         >
           <h2 className="text-4xl font-bold mb-12 text-center">AI in Business</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="card-hover stagger-1">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="icon-container">
-                    <Cpu className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-semibold">Workflow Automation</h3>
-                </div>
-                <p className="text-muted-foreground mb-4">
-                  AI streamlines business operations through:
-                </p>
-                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                  <li>Automated customer service with chatbots</li>
-                  <li>Predictive maintenance in manufacturing</li>
-                  <li>Intelligent document processing</li>
-                  <li>Sales forecasting and inventory management</li>
-                </ul>
-              </CardContent>
-            </Card>
-            <Card className="card-hover stagger-2">
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="icon-container">
-                    <ShieldCheck className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-semibold">Data Analytics</h3>
-                </div>
-                <p className="text-muted-foreground mb-4">
-                  AI enhances decision-making through:
-                </p>
-                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                  <li>Real-time market trend analysis</li>
-                  <li>Customer behavior prediction</li>
-                  <li>Performance optimization</li>
-                  <li>Risk assessment and management</li>
-                </ul>
-              </CardContent>
-            </Card>
+            {businessApplications.map((application, index) => (
+              <ConceptCard key={index} {...application} />
+            ))}
           </div>
         </section>
 
