@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
 import { apiRequest } from "@/lib/queryClient";
-import { CheckCircle2, XCircle, LightbulbIcon } from "lucide-react";
+import { CheckCircle2, XCircle, LightbulbIcon, Trophy, BookOpen, ArrowRight } from "lucide-react";
 
 const quizQuestions = [
   {
@@ -68,11 +68,85 @@ const quizQuestions = [
   },
 ];
 
+interface ResultsCardProps {
+  correctAnswers: number;
+  totalQuestions: number;
+  onRetry: () => void;
+}
+
+function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardProps) {
+  const score = (correctAnswers / totalQuestions) * 100;
+
+  const getFeedback = () => {
+    if (score >= 90) {
+      return {
+        title: "Outstanding Knowledge!",
+        message: "You have an excellent understanding of AI concepts. Consider exploring advanced topics like deep learning and neural networks!",
+        icon: <Trophy className="w-12 h-12 text-yellow-500" />,
+      };
+    } else if (score >= 70) {
+      return {
+        title: "Good Understanding!",
+        message: "You have a solid grasp of AI basics. Focus on understanding machine learning applications to strengthen your knowledge.",
+        icon: <CheckCircle2 className="w-12 h-12 text-green-500" />,
+      };
+    } else {
+      return {
+        title: "Good Start!",
+        message: "You're beginning to understand AI concepts. We recommend reviewing basic AI principles and real-world applications.",
+        icon: <BookOpen className="w-12 h-12 text-blue-500" />,
+      };
+    }
+  };
+
+  const feedback = getFeedback();
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      <div className="text-center space-y-4">
+        {feedback.icon}
+        <h2 className="text-2xl font-bold">{feedback.title}</h2>
+        <div className="text-lg">
+          Your Score: <span className="font-bold">{score.toFixed(0)}%</span>
+        </div>
+        <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-primary transition-all duration-1000 ease-out"
+            style={{ width: `${score}%` }}
+          />
+        </div>
+        <p className="text-muted-foreground mt-4">
+          {correctAnswers} correct out of {totalQuestions} questions
+        </p>
+      </div>
+
+      <div className="bg-muted/50 rounded-lg p-6 space-y-4">
+        <h3 className="font-semibold">Feedback & Suggestions</h3>
+        <p>{feedback.message}</p>
+      </div>
+
+      <Button 
+        onClick={onRetry} 
+        className="w-full"
+        size="lg"
+      >
+        Try Again <ArrowRight className="ml-2 w-4 h-4" />
+      </Button>
+    </motion.div>
+  );
+}
+
 export function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [quizCompleted, setQuizCompleted] = useState(false);
   const { toast } = useToast();
 
   const progress = ((currentQuestion + 1) / quizQuestions.length) * 100;
@@ -94,6 +168,9 @@ export function Quiz() {
       });
 
       const correct = selectedOption === quizQuestions[currentQuestion].correctAnswer;
+      if (correct) {
+        setCorrectAnswers(prev => prev + 1);
+      }
       setIsCorrect(correct);
       setShowResult(true);
 
@@ -103,15 +180,9 @@ export function Quiz() {
           setSelectedOption(null);
           setShowResult(false);
         } else {
-          toast({
-            title: "Quiz completed! 🎉",
-            description: "You've completed all the questions. Feel free to start over!",
-          });
-          setCurrentQuestion(0);
-          setSelectedOption(null);
-          setShowResult(false);
+          setQuizCompleted(true);
         }
-      }, 4000); // Increased timeout to give users time to read the explanation
+      }, 6000); // Increased timeout to give users more time to read
 
     } catch (error) {
       toast({
@@ -120,6 +191,31 @@ export function Quiz() {
       });
     }
   };
+
+  const handleRetry = () => {
+    setCurrentQuestion(0);
+    setSelectedOption(null);
+    setShowResult(false);
+    setCorrectAnswers(0);
+    setQuizCompleted(false);
+  };
+
+  if (quizCompleted) {
+    return (
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle>Quiz Results</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResultsCard 
+            correctAnswers={correctAnswers}
+            totalQuestions={quizQuestions.length}
+            onRetry={handleRetry}
+          />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
