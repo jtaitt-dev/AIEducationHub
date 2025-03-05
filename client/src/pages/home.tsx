@@ -4,10 +4,7 @@ import { Quiz } from "@/components/quiz";
 import { ConceptCard } from "@/components/concept-card";
 import { Brain, Cpu, Bot, ShieldCheck, ChevronDown, Lightbulb, Dna } from "lucide-react";
 import { motion } from "framer-motion";
-
-// Assuming AnimatedBackground component needs to be imported or defined here.  Place holder for now.
-const AnimatedBackground = () => <div>Animated Background Placeholder</div>;
-
+import { AIBackground } from "@/components/AIBackground";
 
 export default function Home() {
   const sections = useRef<HTMLElement[]>([]);
@@ -88,7 +85,7 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-        <AnimatedBackground />
+        <AIBackground />
         <div className="container py-20 text-center relative z-10">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
