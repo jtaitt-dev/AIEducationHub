@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, MessageSquare, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { PromptSuggestions } from "@/components/prompt-suggestions";
 
 // Predefined prompts and responses
 const categories = [
@@ -276,8 +277,10 @@ export default function ChatDemo() {
   const handlePromptSelect = (prompt) => {
     setMessages(prev => [
       ...prev,
-      { role: "user", content: prompt.prompt },
-      prompt.response
+      { role: "user", content: prompt.prompt || prompt },
+      typeof prompt === 'string'
+        ? { role: "assistant", content: "Let me help you with that question..." }
+        : prompt.response
     ]);
   };
 
@@ -349,7 +352,15 @@ export default function ChatDemo() {
           ))}
         </div>
 
-        {/* Prompts area */}
+        {/* Prompt Suggestions */}
+        {selectedCategory && messages.length > 1 && (
+          <PromptSuggestions
+            currentCategory={selectedCategory.id}
+            onSuggestionSelect={handlePromptSelect}
+          />
+        )}
+
+        {/* Available prompts */}
         {selectedCategory && (
           <div className="border-t pt-4">
             <h3 className="font-medium mb-2">Available prompts:</h3>
