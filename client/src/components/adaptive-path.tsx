@@ -33,7 +33,7 @@ const topics: Topic[] = [
     description: "Introduction to machine learning algorithms and applications",
     difficulty: "beginner",
     icon: <Network className="w-6 h-6" />,
-    prerequisites: ["ai-basics"],
+    prerequisites: [],
     estimatedHours: 6,
     completionRate: 0,
   },
@@ -43,7 +43,7 @@ const topics: Topic[] = [
     description: "Deep learning and neural network architectures",
     difficulty: "intermediate",
     icon: <Database className="w-6 h-6" />,
-    prerequisites: ["ml-intro"],
+    prerequisites: [],
     estimatedHours: 8,
     completionRate: 0,
   },
@@ -53,7 +53,7 @@ const topics: Topic[] = [
     description: "Ethical considerations and responsible AI development",
     difficulty: "intermediate",
     icon: <Shield className="w-6 h-6" />,
-    prerequisites: ["ai-basics"],
+    prerequisites: [],
     estimatedHours: 4,
     completionRate: 0,
   },
@@ -63,7 +63,7 @@ const topics: Topic[] = [
     description: "Real-world implementation of AI systems",
     difficulty: "advanced",
     icon: <Bot className="w-6 h-6" />,
-    prerequisites: ["neural-networks", "ai-ethics"],
+    prerequisites: [],
     estimatedHours: 10,
     completionRate: 0,
   },
@@ -73,7 +73,7 @@ const topics: Topic[] = [
     description: "Building and deploying AI solutions",
     difficulty: "advanced",
     icon: <Code className="w-6 h-6" />,
-    prerequisites: ["ai-applications"],
+    prerequisites: [],
     estimatedHours: 12,
     completionRate: 0,
   },
@@ -95,70 +95,50 @@ export function AdaptivePath() {
     }
   };
 
-  const canAccessTopic = (topic: Topic) => {
-    if (topic.prerequisites.length === 0) return true;
-    return topic.prerequisites.every(prereq => {
-      const prerequisiteTopic = topics.find(t => t.id === prereq);
-      return prerequisiteTopic?.completionRate === 100;
-    });
-  };
-
   return (
     <div className="container py-8 space-y-8">
       <div className="text-center max-w-2xl mx-auto mb-12">
         <h2 className="text-3xl font-bold mb-4">Your Learning Path</h2>
         <p className="text-muted-foreground">
-          Follow this personalized learning path to master AI concepts. Topics are unlocked
-          as you complete prerequisites.
+          Explore these AI learning topics in any order. Each topic is designed to build your knowledge
+          and skills in artificial intelligence.
         </p>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {topics.map((topic) => {
-          const isAccessible = canAccessTopic(topic);
-          return (
-            <motion.div
-              key={topic.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+        {topics.map((topic) => (
+          <motion.div
+            key={topic.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Card
+              className="relative transition-all duration-300 hover:shadow-lg cursor-pointer"
+              onClick={() => setSelectedTopic(topic)}
             >
-              <Card
-                className={`relative transition-all duration-300 ${
-                  isAccessible
-                    ? "hover:shadow-lg cursor-pointer"
-                    : "opacity-50 cursor-not-allowed"
-                }`}
-                onClick={() => isAccessible && setSelectedTopic(topic)}
-              >
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className={getDifficultyColor(topic.difficulty)}>
-                      {topic.icon}
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg">{topic.title}</CardTitle>
-                      <p className="text-sm text-muted-foreground capitalize">
-                        {topic.difficulty} • {topic.estimatedHours}hrs
-                      </p>
-                    </div>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className={getDifficultyColor(topic.difficulty)}>
+                    {topic.icon}
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {topic.description}
-                  </p>
-                  <Progress value={topic.completionRate} className="h-2" />
-                  {!isAccessible && (
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Complete prerequisites to unlock
+                  <div>
+                    <CardTitle className="text-lg">{topic.title}</CardTitle>
+                    <p className="text-sm text-muted-foreground capitalize">
+                      {topic.difficulty} • {topic.estimatedHours}hrs
                     </p>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
-          );
-        })}
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {topic.description}
+                </p>
+                <Progress value={topic.completionRate} className="h-2" />
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
       </div>
 
       <AnimatePresence>
@@ -185,14 +165,10 @@ export function AdaptivePath() {
               <CardContent className="space-y-4">
                 <p>{selectedTopic.description}</p>
                 <div>
-                  <h4 className="font-medium mb-2">Prerequisites</h4>
-                  <ul className="list-disc list-inside text-sm text-muted-foreground">
-                    {selectedTopic.prerequisites.map((prereq) => (
-                      <li key={prereq}>
-                        {topics.find((t) => t.id === prereq)?.title}
-                      </li>
-                    ))}
-                  </ul>
+                  <h4 className="font-medium mb-2">Recommended Study Time</h4>
+                  <p className="text-sm text-muted-foreground">
+                    This module typically takes {selectedTopic.estimatedHours} hours to complete.
+                  </p>
                 </div>
                 <Button className="w-full" size="lg">
                   Start Learning
