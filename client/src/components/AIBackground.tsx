@@ -1,41 +1,43 @@
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
 function ParticleSystem() {
   const ref = useRef<THREE.Points>(null!);
 
   // Generate random points
-  const count = 2000;
-  const positions = useMemo(() => {
+  const geometry = useMemo(() => {
+    const geometry = new THREE.BufferGeometry();
+    const count = 2000;
     const positions = new Float32Array(count * 3);
+
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 10;     // x
       positions[i * 3 + 1] = (Math.random() - 0.5) * 10; // y
       positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z
     }
-    return positions;
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    return geometry;
+  }, []);
+
+  const material = useMemo(() => {
+    return new THREE.PointsMaterial({
+      size: 0.02,
+      sizeAttenuation: true,
+      transparent: true,
+      color: new THREE.Color(0x4a90e2),
+      depthWrite: false,
+    });
   }, []);
 
   useFrame((state) => {
     if (!ref.current) return;
-    // Slower, more subtle rotation
     ref.current.rotation.x = state.clock.getElapsedTime() * 0.05;
     ref.current.rotation.y = state.clock.getElapsedTime() * 0.05;
   });
 
-  return (
-    <Points ref={ref} positions={positions}>
-      <PointMaterial
-        transparent
-        color="#4a90e2"
-        size={0.02}
-        sizeAttenuation={true}
-        depthWrite={false}
-      />
-    </Points>
-  );
+  return <primitive object={new THREE.Points(geometry, material)} ref={ref} />;
 }
 
 export function AIBackground() {
