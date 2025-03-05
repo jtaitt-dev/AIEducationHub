@@ -34,20 +34,24 @@ export function AIBackground() {
     const geometry = new THREE.BufferGeometry();
     const count = 2000;
     const positions = new Float32Array(count * 3);
+    const initialY = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 10;     // x
       positions[i * 3 + 1] = (Math.random() - 0.5) * 10; // y
       positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z
+      initialY[i] = positions[i * 3 + 1]; // Store initial Y position
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('initialY', new THREE.BufferAttribute(initialY, 1));
 
     const material = new THREE.PointsMaterial({
-      size: 0.02,
+      size: 0.03,
       sizeAttenuation: true,
       transparent: true,
-      color: new THREE.Color(0x4a90e2),
+      color: new THREE.Color(0x0066cc), // PlayStation blue
+      opacity: 0.8,
       depthWrite: false,
     });
 
@@ -58,8 +62,24 @@ export function AIBackground() {
     let frameId: number | null = null;
     const animate = () => {
       frameId = requestAnimationFrame(animate);
-      particles.rotation.x += 0.0005;
-      particles.rotation.y += 0.0005;
+
+      const positions = particles.geometry.attributes.position.array as Float32Array;
+      const initialY = particles.geometry.attributes.initialY.array as Float32Array;
+      const time = Date.now() * 0.001;
+
+      for (let i = 0; i < count; i++) {
+        const ix = i * 3;
+        const x = positions[ix];
+
+        // Create flowing sine wave effect
+        positions[ix + 1] = initialY[i] + 
+          Math.sin(time + x * 0.5) * 0.5 + // Primary wave
+          Math.sin(time * 0.5 + x * 0.3) * 0.2; // Secondary wave
+      }
+
+      particles.geometry.attributes.position.needsUpdate = true;
+      particles.rotation.y += 0.0002; // Very slow rotation for added depth
+
       renderer.render(scene, camera);
     };
 
