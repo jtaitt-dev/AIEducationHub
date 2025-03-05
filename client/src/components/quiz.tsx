@@ -80,21 +80,51 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
   const getFeedback = () => {
     if (score >= 90) {
       return {
-        title: "Outstanding Knowledge!",
-        message: "You have an excellent understanding of AI concepts. Consider exploring advanced topics like deep learning and neural networks!",
+        title: "Outstanding Knowledge! 🌟",
+        message: "You have an excellent understanding of AI concepts. Your grasp of both theoretical and practical aspects is impressive!",
         icon: <Trophy className="w-12 h-12 text-yellow-500" />,
+        recommendations: [
+          "Explore advanced topics like neural network architectures",
+          "Study real-world AI implementation case studies",
+          "Consider learning about AI ethics and governance",
+          "Dive into specialized areas like computer vision or NLP"
+        ]
       };
-    } else if (score >= 70) {
+    } else if (score >= 75) {
       return {
-        title: "Good Understanding!",
-        message: "You have a solid grasp of AI basics. Focus on understanding machine learning applications to strengthen your knowledge.",
+        title: "Great Progress! 🎯",
+        message: "You have a solid grasp of AI fundamentals. Your understanding of core concepts is strong, with room to explore more advanced topics.",
         icon: <CheckCircle2 className="w-12 h-12 text-green-500" />,
+        recommendations: [
+          "Deep dive into machine learning algorithms",
+          "Practice with hands-on AI projects",
+          "Study different types of neural networks",
+          "Learn about data preprocessing techniques"
+        ]
+      };
+    } else if (score >= 50) {
+      return {
+        title: "Good Foundation! 📚",
+        message: "You're building a good foundation in AI concepts. Focus on strengthening your understanding of the fundamentals.",
+        icon: <BookOpen className="w-12 h-12 text-blue-500" />,
+        recommendations: [
+          "Review basic AI and machine learning concepts",
+          "Practice with simple AI applications",
+          "Study common AI use cases in business",
+          "Focus on understanding data structures in AI"
+        ]
       };
     } else {
       return {
-        title: "Good Start!",
-        message: "You're beginning to understand AI concepts. We recommend reviewing basic AI principles and real-world applications.",
-        icon: <BookOpen className="w-12 h-12 text-blue-500" />,
+        title: "Starting Your AI Journey! 🌱",
+        message: "Everyone starts somewhere! Let's build your AI knowledge from the ground up.",
+        icon: <LightbulbIcon className="w-12 h-12 text-purple-500" />,
+        recommendations: [
+          "Start with basic AI terminology and concepts",
+          "Learn about what AI can and cannot do",
+          "Explore simple examples of AI in daily life",
+          "Focus on understanding one concept at a time"
+        ]
       };
     }
   };
@@ -124,9 +154,29 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
         </p>
       </div>
 
-      <div className="bg-muted/50 rounded-lg p-6 space-y-4">
-        <h3 className="font-semibold">Feedback & Suggestions</h3>
-        <p>{feedback.message}</p>
+      <div className="bg-muted/50 rounded-lg p-6 space-y-6">
+        <div className="space-y-2">
+          <h3 className="font-semibold text-lg">Overall Assessment</h3>
+          <p>{feedback.message}</p>
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="font-semibold text-lg">Personalized Learning Path</h3>
+          <ul className="space-y-3">
+            {feedback.recommendations.map((rec, index) => (
+              <motion.li
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="flex items-center gap-2"
+              >
+                <div className="h-2 w-2 rounded-full bg-primary" />
+                <span>{rec}</span>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <Button 
@@ -182,7 +232,7 @@ export function Quiz() {
         } else {
           setQuizCompleted(true);
         }
-      }, 6000); // Increased timeout to give users more time to read
+      }, 8000); 
 
     } catch (error) {
       toast({
