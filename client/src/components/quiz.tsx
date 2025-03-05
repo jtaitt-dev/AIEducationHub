@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
 import { apiRequest } from "@/lib/queryClient";
-import { CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle, LightbulbIcon } from "lucide-react";
 
 const quizQuestions = [
   {
@@ -19,6 +19,10 @@ const quizQuestions = [
       "A specific brand of computer",
     ],
     correctAnswer: 1,
+    explanation: {
+      correct: "AI is software that can learn and adapt from data and experience. For example, when you use a smart email filter that learns to identify spam over time - that's AI in action!",
+      incorrect: "Think of AI as being like a student that learns from examples. Just as a student improves by studying patterns and examples, AI software learns from data to make better decisions over time."
+    }
   },
   {
     question: "Which of the following is a real-world application of AI?",
@@ -29,6 +33,10 @@ const quizQuestions = [
       "Regular email sending",
     ],
     correctAnswer: 1,
+    explanation: {
+      correct: "Virtual assistants like Siri or Alexa use AI to understand and respond to human language naturally. They can learn from conversations and improve their responses over time.",
+      incorrect: "While automatic coffee makers and calculators are useful tools, they follow fixed programming. AI applications like virtual assistants can understand context, learn, and adapt to different situations."
+    }
   },
   {
     question: "How does AI improve business operations?",
@@ -39,6 +47,10 @@ const quizQuestions = [
       "By increasing electricity consumption",
     ],
     correctAnswer: 1,
+    explanation: {
+      correct: "AI enhances business by handling routine tasks (like sorting emails or processing invoices) and finding patterns in data that humans might miss. This frees up people to focus on more creative and strategic work.",
+      incorrect: "AI's role isn't to replace humans but to assist them. For example, AI can analyze customer data to suggest improvements, while humans make the final strategic decisions."
+    }
   },
   {
     question: "What is machine learning in AI?",
@@ -49,6 +61,10 @@ const quizQuestions = [
       "Installing new software updates",
     ],
     correctAnswer: 2,
+    explanation: {
+      correct: "Machine learning is like teaching by example. Instead of writing specific rules, we show the AI many examples, and it learns patterns. For instance, showing an AI thousands of photos of cats and dogs helps it learn to distinguish between them.",
+      incorrect: "Machine learning isn't about manual programming or simple updates. It's about systems that improve automatically through experience, like how a music recommendation system gets better at suggesting songs the more you use it."
+    }
   },
 ];
 
@@ -95,7 +111,7 @@ export function Quiz() {
           setSelectedOption(null);
           setShowResult(false);
         }
-      }, 1500);
+      }, 4000); // Increased timeout to give users time to read the explanation
 
     } catch (error) {
       toast({
@@ -157,6 +173,41 @@ export function Quiz() {
                 </div>
               ))}
             </RadioGroup>
+
+            {/* Explanation Card */}
+            <AnimatePresence>
+              {showResult && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className={`mt-6 p-4 rounded-lg ${
+                    isCorrect ? 'bg-green-50' : 'bg-blue-50'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1">
+                      <LightbulbIcon className={`w-5 h-5 ${
+                        isCorrect ? 'text-green-500' : 'text-blue-500'
+                      }`} />
+                    </div>
+                    <div>
+                      <h3 className={`font-medium mb-2 ${
+                        isCorrect ? 'text-green-700' : 'text-blue-700'
+                      }`}>
+                        {isCorrect ? "Great job! Here's why:" : "Let's understand this better:"}
+                      </h3>
+                      <p className="text-sm">
+                        {isCorrect 
+                          ? quizQuestions[currentQuestion].explanation.correct
+                          : quizQuestions[currentQuestion].explanation.incorrect}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <Button 
               onClick={handleSubmit} 
               className="w-full mt-6"
