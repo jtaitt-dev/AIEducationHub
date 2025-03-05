@@ -28,7 +28,7 @@ export function ParticleControls({ onSettingsChange }: ParticleControlsProps) {
     opacity: 0.8,
   });
 
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleChange = (key: keyof ParticleSettings, value: number | string) => {
     const newSettings = { ...settings, [key]: value };

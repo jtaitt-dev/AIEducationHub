@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { motion, AnimatePresence } from "framer-motion";
 import { apiRequest } from "@/lib/queryClient";
 import { CheckCircle2, XCircle, LightbulbIcon, Trophy, BookOpen, ArrowRight } from "lucide-react";
+import { Link } from "wouter";
 
 const quizQuestions = [
   {
@@ -88,6 +89,12 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
           "Study real-world AI implementation case studies",
           "Consider learning about AI ethics and governance",
           "Dive into specialized areas like computer vision or NLP"
+        ],
+        suggestedPaths: [
+          { title: "Neural Networks", description: "Deepen your knowledge of deep learning architectures" },
+          { title: "AI Development", description: "Learn to build and deploy sophisticated AI systems" },
+          { title: "Advanced AI Concepts", description: "Explore cutting-edge research and techniques" },
+          { title: "AI for Business", description: "Learn how AI is revolutionizing various industries"}
         ]
       };
     } else if (score >= 75) {
@@ -100,6 +107,12 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
           "Practice with hands-on AI projects",
           "Study different types of neural networks",
           "Learn about data preprocessing techniques"
+        ],
+        suggestedPaths: [
+          { title: "Machine Learning Basics", description: "Master the fundamentals of ML algorithms" },
+          { title: "AI Applications", description: "Apply your knowledge to real-world problems" },
+          { title: "Practical Machine Learning", description: "Hands-on projects and case studies"},
+          { title: "AI for Data Science", description: "Combine AI with data analysis techniques"}
         ]
       };
     } else if (score >= 50) {
@@ -112,6 +125,12 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
           "Practice with simple AI applications",
           "Study common AI use cases in business",
           "Focus on understanding data structures in AI"
+        ],
+        suggestedPaths: [
+          { title: "AI Fundamentals", description: "Strengthen your understanding of core AI concepts" },
+          { title: "Machine Learning Basics", description: "Build a solid foundation in ML" },
+          { title: "Introduction to AI", description: "A beginner-friendly course covering key concepts"},
+          { title: "AI and its impact on society", description: "Explore the broader implications of AI"}
         ]
       };
     } else {
@@ -124,6 +143,12 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
           "Learn about what AI can and cannot do",
           "Explore simple examples of AI in daily life",
           "Focus on understanding one concept at a time"
+        ],
+        suggestedPaths: [
+          { title: "AI Fundamentals", description: "Start with the basics of AI" },
+          { title: "AI Ethics & Safety", description: "Understand the responsible use of AI" },
+          { title: "Beginner's Guide to AI", description: "Easy-to-understand introduction to AI for beginners"},
+          { title: "AI in Everyday Life", description: "Explore AI applications in your daily routine"}
         ]
       };
     }
@@ -176,6 +201,22 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
               </motion.li>
             ))}
           </ul>
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="font-semibold text-lg">Recommended Learning Paths</h3>
+          <div className="grid gap-4 md:grid-cols-2">
+            {feedback.suggestedPaths.map((path, index) => (
+              <Link href={`/learning-path/${index}`} key={index}>
+                <Card className="transition-all duration-300 hover:shadow-lg">
+                  <CardContent className="pt-6">
+                    <h4 className="font-medium text-lg mb-2">{path.title}</h4>
+                    <p className="text-sm text-muted-foreground">{path.description}</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
