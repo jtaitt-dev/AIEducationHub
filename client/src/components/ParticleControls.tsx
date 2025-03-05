@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -6,6 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { debounce } from "@/lib/utils";
 
 interface ParticleSettings {
   count: number;
@@ -30,22 +37,45 @@ export function ParticleControls({ onSettingsChange }: ParticleControlsProps) {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  // Debounce the settings change to prevent too frequent updates
+  const debouncedSettingsChange = useCallback(
+    debounce((newSettings: ParticleSettings) => {
+      onSettingsChange(newSettings);
+    }, 100),
+    []
+  );
+
   const handleChange = (key: keyof ParticleSettings, value: number | string) => {
     const newSettings = { ...settings, [key]: value };
     setSettings(newSettings);
-    onSettingsChange(newSettings);
+    debouncedSettingsChange(newSettings);
   };
 
   return (
     <div className="fixed bottom-4 right-0 flex items-end">
-      <Button
-        variant="outline"
-        size="icon"
-        className="mr-2 mb-4"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? <ChevronRight /> : <ChevronLeft />}
-      </Button>
+      <TooltipProvider delayDuration={400}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="mr-2 mb-4 animate-pulse hover:animate-none"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <ChevronRight /> : <ChevronLeft />}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent 
+            side="left" 
+            className="max-w-[200px] bg-primary/5 backdrop-blur-sm border-primary/20"
+            sideOffset={5}
+          >
+            <p className="text-sm">
+              ✨ Click to customize the background animation! Adjust particle count, size, speed, and more.
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <AnimatePresence>
         {isOpen && (

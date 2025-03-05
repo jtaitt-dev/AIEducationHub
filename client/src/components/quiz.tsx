@@ -173,7 +173,7 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
           Your Score: <span className="font-bold">{score.toFixed(0)}%</span>
         </div>
         <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-          <div 
+          <div
             className="h-full bg-primary transition-all duration-1000 ease-out"
             style={{ width: `${score}%` }}
           />
@@ -224,8 +224,8 @@ function ResultsCard({ correctAnswers, totalQuestions, onRetry }: ResultsCardPro
         </div>
       </div>
 
-      <Button 
-        onClick={onRetry} 
+      <Button
+        onClick={onRetry}
         className="w-full"
         size="lg"
       >
@@ -242,6 +242,7 @@ export function Quiz() {
   const [isCorrect, setIsCorrect] = useState(false);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const progress = ((currentQuestion + 1) / quizQuestions.length) * 100;
@@ -254,6 +255,9 @@ export function Quiz() {
       });
       return;
     }
+
+    if (isSubmitting) return; // Prevent multiple submissions
+    setIsSubmitting(true);
 
     try {
       await apiRequest("POST", "/api/quiz", {
@@ -269,6 +273,7 @@ export function Quiz() {
       setIsCorrect(correct);
       setShowResult(true);
 
+      // Add a delay before moving to the next question
       setTimeout(() => {
         if (currentQuestion < quizQuestions.length - 1) {
           setCurrentQuestion(prev => prev + 1);
@@ -277,11 +282,14 @@ export function Quiz() {
         } else {
           setQuizCompleted(true);
         }
-      }, 8000); 
+        setIsSubmitting(false);
+      }, 3000); // Reduced from 8000ms to 3000ms to prevent long waits
 
     } catch (error) {
+      setIsSubmitting(false);
       toast({
         title: "Error submitting answer",
+        description: "Please try again in a moment",
         variant: "destructive",
       });
     }
@@ -302,7 +310,7 @@ export function Quiz() {
           <CardTitle>Quiz Results</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResultsCard 
+          <ResultsCard
             correctAnswers={correctAnswers}
             totalQuestions={quizQuestions.length}
             onRetry={handleRetry}
@@ -348,7 +356,7 @@ export function Quiz() {
                       : 'hover:bg-accent'
                     }`}
                 >
-                  <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                  <RadioGroupItem value={index.toString()} id={`option-${index}`} disabled={showResult || isSubmitting} />
                   <Label
                     htmlFor={`option-${index}`}
                     className="flex-grow text-base cursor-pointer"
@@ -389,23 +397,31 @@ export function Quiz() {
                         {isCorrect ? "Great job! Here's why:" : "Let's understand this better:"}
                       </h3>
                       <p className="text-sm">
-                        {isCorrect 
+                        {isCorrect
                           ? quizQuestions[currentQuestion].explanation.correct
                           : quizQuestions[currentQuestion].explanation.incorrect}
                       </p>
+                      <div className="mt-4">
+                        <Link
+                          href={quizQuestions[currentQuestion].relatedPath}
+                          className="text-sm text-primary hover:underline"
+                        >
+                          Learn more about this topic →
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            <Button 
-              onClick={handleSubmit} 
+            <Button
+              onClick={handleSubmit}
               className="w-full mt-6"
               size="lg"
-              disabled={selectedOption === null || showResult}
+              disabled={selectedOption === null || showResult || isSubmitting}
             >
-              Submit Answer
+              {isSubmitting ? "Submitting..." : "Submit Answer"}
             </Button>
           </motion.div>
         </AnimatePresence>
