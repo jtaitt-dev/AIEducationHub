@@ -1,18 +1,17 @@
 import { useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Quiz } from "@/components/quiz";
-import { Button } from "@/components/ui/button";
 import { Brain, Cpu, Bot, ShieldCheck } from "lucide-react";
 
 export default function Home() {
-  const sections = useRef<(HTMLElement | null)[]>([]);
+  const sections = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-in", "fade-in", "duration-700");
+            entry.target.classList.add("fade-in-up");
           }
         });
       },
@@ -29,8 +28,10 @@ export default function Home() {
   return (
     <div className="container py-8 space-y-12">
       <section
-        ref={(el) => (sections.current[0] = el)}
-        className="opacity-0"
+        ref={(el) => {
+          if (el) sections.current[0] = el;
+        }}
+        className="transition-all duration-700 opacity-100 transform-none"
       >
         <h1 className="text-4xl font-bold mb-6">Understanding AI & ChatGPT</h1>
         <p className="text-xl text-muted-foreground mb-8 max-w-3xl">
@@ -76,8 +77,10 @@ export default function Home() {
       </section>
 
       <section
-        ref={(el) => (sections.current[1] = el)}
-        className="opacity-0"
+        ref={(el) => {
+          if (el) sections.current[1] = el;
+        }}
+        className="transition-all duration-700 opacity-100 transform-none"
       >
         <h2 className="text-3xl font-bold mb-6">AI in Business</h2>
         <div className="grid md:grid-cols-2 gap-6">
@@ -119,8 +122,10 @@ export default function Home() {
       </section>
 
       <section
-        ref={(el) => (sections.current[2] = el)}
-        className="opacity-0"
+        ref={(el) => {
+          if (el) sections.current[2] = el;
+        }}
+        className="transition-all duration-700 opacity-100 transform-none"
       >
         <h2 className="text-3xl font-bold mb-6">Test Your Knowledge</h2>
         <Quiz />
