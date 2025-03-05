@@ -547,11 +547,11 @@ export function AdaptivePath() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-8 pt-16 overflow-y-auto"
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-start justify-center p-8 pt-24 overflow-y-auto"
             onClick={() => setSelectedTopic(null)}
           >
             <Card
-              className="w-full max-w-3xl my-8"
+              className="w-full max-w-3xl mb-8 mt-4"
               onClick={(e) => e.stopPropagation()}
             >
               <CardHeader>
