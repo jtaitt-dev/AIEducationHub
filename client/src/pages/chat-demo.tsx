@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Copy, MessageSquare, ChevronRight } from "lucide-react";
+import { Copy, MessageSquare, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 
@@ -10,8 +10,8 @@ const categories = [
   {
     id: "email",
     icon: "📧",
-    title: "Write a professional email",
-    description: "Generate email templates for different scenarios",
+    title: "Email Templates",
+    description: "Generate formal, casual, and follow-up emails",
     prompts: [
       {
         prompt: "Write a formal business email following up on a meeting",
@@ -60,7 +60,7 @@ Cheers,
   {
     id: "excel",
     icon: "📊",
-    title: "Help with Excel formulas",
+    title: "Excel Formulas",
     description: "Get help with Excel functions and formulas",
     prompts: [
       {
@@ -83,28 +83,172 @@ Breaking it down:
 
 Would you like me to provide more examples or explain other Excel functions?`
         }
-      },
+      }
+    ]
+  },
+  {
+    id: "python",
+    icon: "🐍",
+    title: "Python Scripts",
+    description: "Get Python code for common tasks",
+    prompts: [
       {
-        prompt: "How do I create a Pivot Table?",
+        prompt: "How do I read an Excel file using pandas?",
         response: {
           role: "assistant",
-          content: `I'll guide you through creating a Pivot Table:
+          content: `Here's how to read and work with Excel files using pandas:
 
-1. Start by selecting your data range
-2. Go to Insert > PivotTable
-3. Choose where to place the pivot table
+# First, install pandas and openpyxl
+pip install pandas openpyxl
 
-Then, use the PivotTable Fields pane to:
-• Drag fields to Rows for categories
-• Add values to summarize in Values area
-• Use Filters to filter your data
-• Add fields to Columns for additional dimensions
+# Here's the Python code
+import pandas as pd
 
-Common calculations you might need:
-=GETPIVOTDATA("Sales",A3)
-=SUBTOTAL(9,A1:A100) // For summarizing filtered data
+# Read the Excel file
+df = pd.read_excel('your_file.xlsx', sheet_name='Sheet1')
 
-Need help with specific pivot table calculations?`
+# Basic operations you might need:
+# View first few rows
+print(df.head())
+
+# Get column names
+print(df.columns)
+
+# Filter data
+filtered_df = df[df['column_name'] > 100]
+
+# Save changes back to Excel
+df.to_excel('output.xlsx', index=False)
+
+Need help with specific pandas operations?`
+        }
+      }
+    ]
+  },
+  {
+    id: "sql",
+    icon: "🛢",
+    title: "SQL Queries",
+    description: "Get help with SQL queries and database operations",
+    prompts: [
+      {
+        prompt: "How do I join two tables in SQL?",
+        response: {
+          role: "assistant",
+          content: `Here's a guide to joining tables in SQL:
+
+1. INNER JOIN - Only matching rows:
+SELECT orders.order_id, customers.name
+FROM orders
+INNER JOIN customers 
+ON orders.customer_id = customers.id;
+
+2. LEFT JOIN - All rows from left table:
+SELECT products.name, categories.category_name
+FROM products
+LEFT JOIN categories
+ON products.category_id = categories.id;
+
+3. Common JOIN scenarios:
+-- Join multiple tables
+SELECT orders.order_id, 
+       customers.name,
+       products.product_name
+FROM orders
+JOIN customers ON orders.customer_id = customers.id
+JOIN products ON orders.product_id = products.id;
+
+Need more specific JOIN examples?`
+        }
+      }
+    ]
+  },
+  {
+    id: "regex",
+    icon: "🔍",
+    title: "Regex Patterns",
+    description: "Get regular expressions for common patterns",
+    prompts: [
+      {
+        prompt: "How do I validate an email with regex?",
+        response: {
+          role: "assistant",
+          content: `Here's a reliable email validation regex pattern:
+
+Pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$
+
+Example usage in different languages:
+
+// JavaScript
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const isValid = emailRegex.test('user@example.com');
+
+# Python
+import re
+email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+is_valid = re.match(email_regex, 'user@example.com')
+
+The pattern breaks down as:
+• ^: Start of string
+• [a-zA-Z0-9._%+-]+: Username can contain letters, numbers, and certain special characters
+• @: Email separator
+• [a-zA-Z0-9.-]+: Domain name
+• \\.: Dot separator
+• [a-zA-Z]{2,}: Top-level domain of at least 2 characters
+• $: End of string
+
+Need help with other regex patterns?`
+        }
+      }
+    ]
+  },
+  {
+    id: "javascript",
+    icon: "🖥",
+    title: "JavaScript Code",
+    description: "Get JavaScript snippets for common tasks",
+    prompts: [
+      {
+        prompt: "How do I fetch data from an API in JavaScript?",
+        response: {
+          role: "assistant",
+          content: `Here are different ways to fetch data from an API:
+
+// Using async/await (Modern approach)
+async function fetchData() {
+  try {
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Using .then() chains
+fetch('https://api.example.com/data')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+
+// POST request with data
+async function postData(data) {
+  try {
+    const response = await fetch('https://api.example.com/post', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    console.log(result);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+Need more specific API examples?`
         }
       }
     ]
@@ -171,7 +315,7 @@ export default function ChatDemo() {
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex ${
+              className={`flex group ${
                 message.role === "assistant" ? "bg-muted/50" : "bg-background"
               } p-4 rounded-lg`}
             >
