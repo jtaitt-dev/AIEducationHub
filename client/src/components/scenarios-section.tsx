@@ -25,6 +25,12 @@ const roleExamples = {
     "Create comprehensive training materials",
     "Generate onboarding checklists and documentation",
     "Write professional performance review templates"
+  ],
+  "customer-service": [
+    "Draft clear, empathetic responses to customer inquiries",
+    "Summarize lengthy customer feedback quickly for internal teams",
+    "Generate FAQs or troubleshooting steps for common customer issues",
+    "Create response templates for different customer scenarios"
   ]
 };
 
@@ -33,17 +39,20 @@ export default function ScenariosSection() {
     <section id="scenarios" className="space-y-8">
       <h2 className="text-3xl font-bold text-center">Real-world Scenarios</h2>
       <Tabs defaultValue="sales" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full sm:grid-cols-3 md:grid-cols-5">
           <TabsTrigger value="sales">Sales</TabsTrigger>
           <TabsTrigger value="marketing">Marketing</TabsTrigger>
           <TabsTrigger value="operations">Operations</TabsTrigger>
           <TabsTrigger value="hr">HR</TabsTrigger>
+          <TabsTrigger value="customer-service">Customer Service</TabsTrigger>
         </TabsList>
         {Object.entries(roleExamples).map(([role, examples]) => (
           <TabsContent key={role} value={role}>
             <Card>
               <CardContent className="pt-6">
-                <h3 className="text-xl font-semibold mb-4 capitalize">{role} Role Examples</h3>
+                <h3 className="text-xl font-semibold mb-4 capitalize">
+                  {role.replace("-", " ")} Role Examples
+                </h3>
                 <ul className="space-y-4">
                   {examples.map((example, i) => (
                     <li key={i} className="flex items-start gap-2">

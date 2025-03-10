@@ -6,9 +6,8 @@ export function Navigation() {
 
   const navItems = [
     { href: "/", label: "AI Overview" },
-    { href: "/chat-demo", label: "ChatGPT Demo" },
     { href: "/learning-path", label: "Learning Path" },
-    { href: "/best-practices", label: "Best Practices" },
+    { href: "/lunch-and-learn", label: "Lunch & Learn" },
   ];
 
   return (
