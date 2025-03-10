@@ -1,0 +1,53 @@
+Create an interactive, visually appealing, and easy-to-navigate webpage using HTML, CSS, and JavaScript that serves as a digital guide for our "Lunch & Learn: ChatGPT—Your New Productivity Partner." The page should clearly present each section of the lesson plan, include interactive elements to enhance learning, and enable smooth navigation between sections.
+Webpage Structure & Sections:
+
+    Navbar/Menu (fixed at the top):
+        Links: Intro, Why it Matters, Real-world Scenarios, Hands-On Demo, Best Practices, Q&A
+
+    Intro Section (What is ChatGPT?):
+        Short, clear description of ChatGPT.
+        Interactive "Show examples" button displaying quick examples in a modal or dropdown:
+            Draft emails instantly.
+            Summarize documents.
+            Generate ideas quickly.
+
+    Why it Matters Section:
+        Use clear cards or boxes to highlight the benefits:
+            Save Significant Time ⏳
+            Boost Productivity 🚀
+            Spark Creativity 💡
+            Improve Accuracy 📈
+            Learn & Upskill 🧠
+            Streamline Projects ⚡
+            Better Problem Solving 🚨
+        Each benefit card should expand or flip to show practical, relatable examples when clicked.
+
+    Real-world Scenarios Section:
+        Include tabs or accordions for different job roles (Sales, Marketing, Operations/Admin, HR).
+        Each accordion/tab clearly lists examples relevant to that role.
+
+    Interactive Demo Section (Hands-On):
+        Provide selectable buttons for each practical scenario:
+            📧 Draft Professional Email
+            📖 Summarize Documents
+            💡 Idea Generation
+            🔧 Solve Problems Efficiently
+        Clicking each button opens an interactive textbox/modal pre-filled with sample ChatGPT prompts that users can edit and practice.
+
+    Best Practices & Ethics Section:
+        Clearly formatted guidelines in bullet points.
+        Interactive checklist for ethical use, allowing users to mark off best practices they've understood.
+
+    Wrap-up & Q&A Section:
+        Include an embedded feedback form for users to submit immediate questions or insights after the session.
+
+Interactivity & UX requirements:
+
+    Smooth scrolling when navigating between sections.
+    Mobile-responsive layout.
+    Modern and clean UI design—use subtle animations, transitions, and hover effects for enhanced interactivity.
+    Clearly readable font and intuitive icons/emojis for visual clarity.
+    Ensure each interaction is seamless, responsive, and engaging without page reloads.
+
+✅ Output:
+A complete, fully-functional, interactive webpage, clearly organized and ready to launch directly on Replit.
