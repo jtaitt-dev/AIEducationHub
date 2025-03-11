@@ -1,3 +1,4 @@
+import { useState, Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -6,121 +7,123 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Shield, AlertTriangle, Users, Brain, Lock, Scale, Bot, LineChart } from "lucide-react";
 
-// Define practices data here to keep it with the component
-const practices = [
-  {
-    icon: <Shield className="w-8 h-8 text-primary" />,
-    title: "Data Privacy & Security",
-    description: "Keep customer and supplier information safe when using AI tools.",
-    examples: [
-      "Remove customer names and order numbers before asking ChatGPT for help",
-      "Never share supplier pricing sheets directly with AI - summarize data instead",
-      "Use company password manager for AI tool access",
-      "Clear your chat history after completing sensitive tasks"
-    ],
-    tooltip: "Protect sensitive business information",
-    quickTip: "Always sanitize data before sharing with AI"
-  },
-  {
-    icon: <Scale className="w-8 h-8 text-primary" />,
-    title: "Fairness & Validation",
-    description: "Ensure AI suggestions are accurate and fair for all suppliers and customers.",
-    examples: [
-      "Cross-check AI pricing suggestions against official supplier catalogs",
-      "Test AI responses with different product categories",
-      "Verify automated email responses for accuracy",
-      "Double-check AI-generated supplier quotes"
-    ],
-    tooltip: "Maintain accuracy and fairness in AI operations",
-    quickTip: "Verify AI suggestions against official sources"
-  },
-  {
-    icon: <Brain className="w-8 h-8 text-primary" />,
-    title: "Smart AI Usage",
-    description: "Make the most of AI tools for daily tasks.",
-    examples: [
-      "Use ChatGPT to help clean and format supplier data files",
-      "Ask AI to help draft initial supplier communication emails",
-      "Get AI assistance with Excel formulas for inventory tracking",
-      "Use AI to summarize long supplier documentation"
-    ],
-    tooltip: "Leverage AI to boost productivity",
-    quickTip: "Start with simple, repetitive tasks"
-  },
-  {
-    icon: <AlertTriangle className="w-8 h-8 text-primary" />,
-    title: "Quality Control",
-    description: "Double-check AI outputs before using them in business operations.",
-    examples: [
-      "Review AI-generated pricing before sending to customers",
-      "Verify product specifications against manufacturer data",
-      "Test AI-suggested inventory formulas with sample data",
-      "Have a colleague review important AI-generated content"
-    ],
-    tooltip: "Maintain high accuracy in AI-assisted work",
-    quickTip: "Always verify critical information"
-  },
-  {
-    icon: <Users className="w-8 h-8 text-primary" />,
-    title: "Team Collaboration",
-    description: "Work together to use AI effectively.",
-    examples: [
-      "Share successful ChatGPT prompts for common tasks",
-      "Document which AI tools work best for specific supplier tasks",
-      "Create a team knowledge base of AI best practices",
-      "Regular team updates on new AI features and uses"
-    ],
-    tooltip: "Build collective AI expertise",
-    quickTip: "Share successful AI workflows"
-  },
-  {
-    icon: <Lock className="w-8 h-8 text-primary" />,
-    title: "ERP & CRM Integration",
-    description: "Use AI safely with business systems.",
-    examples: [
-      "Use AI to help troubleshoot Dynamics 365 workflows",
-      "Get AI assistance with Salespad report formatting",
-      "Use ChatGPT to optimize Monday.com task templates",
-      "Keep system credentials secure when using AI"
-    ],
-    tooltip: "Integrate AI with existing systems safely",
-    quickTip: "Never share system credentials with AI"
-  },
-  {
-    icon: <Bot className="w-8 h-8 text-primary" />,
-    title: "Human Oversight",
-    description: "Keep human judgment in the loop.",
-    examples: [
-      "Review AI-generated supplier reports before sharing",
-      "Manually verify pricing calculations from AI",
-      "Keep final approval on customer communications",
-      "Know when to handle sensitive supplier negotiations directly"
-    ],
-    tooltip: "Maintain control over AI processes",
-    quickTip: "Always review AI suggestions"
-  },
-  {
-    icon: <LineChart className="w-8 h-8 text-primary" />,
-    title: "Performance Tracking",
-    description: "Monitor how AI improves your work.",
-    examples: [
-      "Track time saved using AI for data entry",
-      "Document successful AI-assisted supplier negotiations",
-      "Report any AI mistakes or inaccuracies",
-      "Share AI productivity wins with the team"
-    ],
-    tooltip: "Measure AI effectiveness",
-    quickTip: "Keep track of AI successes"
-  }
-];
+// Lazy load icons
+const PracticeCardIcon = lazy(() => import("./practice-card-icons"));
 
 interface PracticeCardProps {
   index: number;
 }
 
+const practices = [
+  {
+    iconKey: "privacy",
+    title: "Data Privacy & Security",
+    description: "Keep customer, supplier, and company data secure when using AI tools.",
+    examples: [
+      "Remove customer names, account numbers, and sensitive order details before asking ChatGPT for help",
+      "Never directly upload supplier pricing sheets—summarize or anonymize data first",
+      "Use our approved company password manager to securely access AI tools",
+      "Clear your ChatGPT conversation history immediately after completing sensitive tasks"
+    ],
+    tooltip: "Protect sensitive business information",
+    quickTip: "Always sanitize sensitive information before inputting into AI"
+  },
+  {
+    iconKey: "fairness",
+    title: "Fairness & Validation",
+    description: "Ensure AI-generated content is accurate, unbiased, and fair for all customers and suppliers.",
+    examples: [
+      "Cross-check AI-recommended pricing against official supplier catalogs",
+      "Verify AI-generated supplier quotes and inventory updates before sending",
+      "Test AI responses with diverse product categories to ensure consistency",
+      "Double-check automated email responses for accuracy and tone"
+    ],
+    tooltip: "Maintain accuracy and fairness in AI operations",
+    quickTip: "Always verify AI suggestions against trusted official sources"
+  },
+  {
+    iconKey: "smart",
+    title: "Smart AI Usage",
+    description: "Get the most value from AI by starting with repetitive or time-consuming daily tasks.",
+    examples: [
+      "Use ChatGPT to quickly format and clean up supplier data files",
+      "Draft initial supplier communication emails using AI",
+      "Leverage AI to assist with complex Excel formulas for inventory tracking",
+      "Summarize lengthy supplier documents or internal reports swiftly with AI"
+    ],
+    tooltip: "Leverage AI to boost productivity",
+    quickTip: "Integrate AI gradually into routine workflows first"
+  },
+  {
+    iconKey: "quality",
+    title: "Quality Control",
+    description: "Always verify AI outputs carefully before integrating them into business operations.",
+    examples: [
+      "Check AI-generated pricing carefully before sharing with customers",
+      "Verify product specifications generated by AI against manufacturer-provided data",
+      "Test AI-suggested inventory or sales formulas on sample datasets first",
+      "Request peer review for important content generated using ChatGPT"
+    ],
+    tooltip: "Maintain high accuracy in AI-assisted work",
+    quickTip: "Review critical information twice—AI helps, but humans approve"
+  },
+  {
+    iconKey: "team",
+    title: "Team Collaboration",
+    description: "Share AI success stories and best practices openly to elevate the team's productivity.",
+    examples: [
+      "Share effective ChatGPT prompts for frequent supplier-related tasks",
+      "Maintain a shared team knowledge base detailing which AI tools excel at specific tasks",
+      "Regularly update your team about new AI features and practical uses",
+      "Celebrate and share AI productivity wins openly within Teams or Monday.com"
+    ],
+    tooltip: "Build collective AI expertise",
+    quickTip: "Document and communicate successful AI-driven workflows regularly"
+  },
+  {
+    iconKey: "integration",
+    title: "ERP & CRM Integration",
+    description: "Safely leverage AI alongside business-critical systems like Dynamics 365, Salespad, and Monday.com.",
+    examples: [
+      "Use AI to troubleshoot Dynamics 365 Business Central workflow logic",
+      "Request ChatGPT assistance for formatting or generating Salespad reports",
+      "Optimize Monday.com templates using AI suggestions without exposing sensitive data",
+      "Always secure system passwords and user credentials away from AI environments"
+    ],
+    tooltip: "Integrate AI with existing systems safely",
+    quickTip: "Never input or share login credentials or sensitive ERP/CRM data with AI tools"
+  },
+  {
+    iconKey: "oversight",
+    title: "Human Oversight",
+    description: "Maintain human judgment and oversight—AI assists, but humans decide.",
+    examples: [
+      "Review AI-generated supplier or customer-facing reports thoroughly before distribution",
+      "Manually validate critical AI-calculated pricing or inventory data",
+      "Maintain human approval on all final customer communications and sensitive negotiations",
+      "Clearly identify scenarios where direct human interaction is more appropriate"
+    ],
+    tooltip: "Maintain control over AI processes",
+    quickTip: "Never fully automate critical business decisions without human review"
+  },
+  {
+    iconKey: "performance",
+    title: "Performance Tracking",
+    description: "Actively monitor and record how AI enhances productivity and quality in your workflow.",
+    examples: [
+      "Track time saved using ChatGPT to streamline data entry and report preparation",
+      "Document successes and improvements in supplier negotiations with AI assistance",
+      "Report AI inaccuracies promptly for continuous improvement",
+      "Regularly share documented productivity gains achieved through AI with your team"
+    ],
+    tooltip: "Measure AI effectiveness",
+    quickTip: "Measure and communicate the impact of AI regularly"
+  }
+];
+
 export default function PracticeCard({ index }: PracticeCardProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
   const practice = practices[index];
 
   return (
@@ -128,6 +131,7 @@ export default function PracticeCard({ index }: PracticeCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
+      onAnimationComplete={() => setIsLoaded(true)}
     >
       <TooltipProvider>
         <Tooltip>
@@ -135,7 +139,11 @@ export default function PracticeCard({ index }: PracticeCardProps) {
             <Card className="transition-all duration-300 hover:shadow-lg cursor-help border-primary/10">
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">{practice.icon}</div>
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <Suspense fallback={<div className="w-8 h-8" />}>
+                      {isLoaded && <PracticeCardIcon iconKey={practice.iconKey} />}
+                    </Suspense>
+                  </div>
                   <CardTitle className="text-xl">{practice.title}</CardTitle>
                 </div>
               </CardHeader>
