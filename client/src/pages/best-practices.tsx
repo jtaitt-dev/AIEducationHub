@@ -125,7 +125,7 @@ export default function BestPractices() {
             <p className="text-lg text-muted-foreground">
               Discover how to leverage ChatGPT to boost your productivity and streamline your daily tasks at Neta Scientific.
             </p>
-            <Button size="lg" className="mt-6">
+            <Button size="lg" className="mt-6" onClick={() => window.open('https://chatgpt.com/', '_blank', 'noopener,noreferrer')}>
               Try ChatGPT Now
             </Button>
           </div>
