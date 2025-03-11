@@ -9,7 +9,7 @@ import {
 const faqs = [
   {
     question: "How do I get access to ChatGPT?",
-    answer: "Contact IT or the Catalog Team to request ChatGPT access. Once approved, you'll receive login credentials and onboarding instructions."
+    answer: "Contact IT to request ChatGPT access. Once approved, you'll receive login credentials and onboarding instructions."
   },
   {
     question: "Can I use ChatGPT for ERP tasks?",
