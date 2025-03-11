@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { createServer } from "net";
+import path from "path";
 
 // Function to find an available port
 const findAvailablePort = (startPort: number): Promise<number> => {
@@ -28,7 +29,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Request logging middleware
+// Request logging middleware with performance tracking
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -92,14 +93,16 @@ app.use((req, res, next) => {
       });
     });
 
-    // Setup Vite after server is running
-    log('Setting up Vite...');
-    if (app.get("env") === "development") {
+    // Setup static serving
+    log('Setting up static serving...');
+    // Use development mode with Vite for better development experience
+    if (process.env.NODE_ENV === 'development') {
       await setupVite(app, server);
       log('Vite setup complete');
     } else {
-      serveStatic(app);
-      log('Static serving enabled');
+      // For production, serve static files from the dist directory
+      app.use(express.static(path.resolve(__dirname, '../dist/public')));
+      log('Static serving enabled from dist/public');
     }
 
     console.timeEnd('Server Startup');

@@ -9,28 +9,28 @@ const demoScenarios = [
   {
     id: "email",
     icon: <Mail className="w-6 h-6" />,
-    title: "📧 Draft Professional Email",
+    title: "Draft Professional Email",
     prompt: "Draft a follow-up email to a supplier about delayed shipment",
     example: "Please write a professional email to follow up on order #12345 that was supposed to arrive last week. The supplier is ABC Manufacturing, and we need the items urgently for a customer order."
   },
   {
     id: "summary",
     icon: <FileText className="w-6 h-6" />,
-    title: "📖 Summarize Documents",
+    title: "Summarize Documents",
     prompt: "Create a summary of a product specification document",
     example: "Please summarize the key specifications, safety requirements, and technical details from this 20-page product manual into a concise 1-page overview for our sales team."
   },
   {
     id: "ideas",
     icon: <Lightbulb className="w-6 h-6" />,
-    title: "💡 Idea Generation",
+    title: "Idea Generation",
     prompt: "Generate ideas for improving inventory management",
     example: "Help me brainstorm innovative ways to improve our inventory tracking system. Focus on automation opportunities and ways to reduce manual data entry errors."
   },
   {
     id: "problem",
     icon: <WrenchIcon className="w-6 h-6" />,
-    title: "🔧 Solve Problems",
+    title: "Solve Problems",
     prompt: "Troubleshoot a data validation issue",
     example: "I need help creating an Excel formula that will validate supplier prices against our approved price list and highlight any discrepancies greater than 5%."
   }
