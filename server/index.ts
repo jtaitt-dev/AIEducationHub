@@ -1,7 +1,12 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { log } from "./vite";
+import { log, setupVite } from "./vite";
 import path from "path";
+import { fileURLToPath } from "url";
+
+// ESM dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
@@ -33,13 +38,12 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
+const startServer = async (retries = 3) => {
   try {
     console.time('Server Startup');
     log('Starting server initialization...');
 
-    // Start with a fixed port for testing
-    const port = 5001;
+    const port = 5000;
     log(`Using port: ${port}`);
 
     // Setup routes and error handling
@@ -54,27 +58,72 @@ app.use((req, res, next) => {
       res.status(status).json({ message });
     });
 
-    // Start server with explicit error handling
-    await new Promise<void>((resolve, reject) => {
-      server.listen({
-        port,
-        host: "0.0.0.0",
-      }, () => {
-        log(`Server listening on port ${port}`);
-        resolve();
-      }).on('error', (err) => {
-        reject(err);
+    // Start server with explicit error handling and retry logic
+    try {
+      await new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Server startup timeout'));
+        }, 5000);
+
+        server.listen({
+          port,
+          host: "0.0.0.0",
+        }, () => {
+          clearTimeout(timeout);
+          log(`Server listening on port ${port}`);
+          resolve();
+        }).on('error', (err: NodeJS.ErrnoException) => {
+          clearTimeout(timeout);
+          reject(err);
+        });
       });
-    });
 
-    // Basic static file serving
-    app.use(express.static(path.resolve(__dirname, '../dist/public')));
-    log('Static serving enabled');
+      // Setup Vite in development mode
+      if (process.env.NODE_ENV !== "production") {
+        log('Setting up Vite for development...');
+        await setupVite(app, server);
+        log('Vite setup complete');
+      } else {
+        // In production, serve static files from the dist directory
+        const publicPath = path.resolve(__dirname, '../dist/public');
+        log(`Setting up static serving from: ${publicPath}`);
+        app.use(express.static(publicPath));
 
-    console.timeEnd('Server Startup');
-    log('Server startup complete');
+        // Add SPA fallback route for client-side routing
+        app.get('*', (req, res) => {
+          res.sendFile(path.join(publicPath, 'index.html'));
+        });
+        log('Static serving enabled');
+      }
+
+      console.timeEnd('Server Startup');
+      log('Server startup complete');
+
+    } catch (err: any) {
+      if (err.code === 'EADDRINUSE' && retries > 0) {
+        log(`Port ${port} in use, killing existing process and retrying...`);
+        // Wait briefly before retrying
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return startServer(retries - 1);
+      }
+      throw err;
+    }
+
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
   }
-})();
+};
+
+// Handle cleanup
+process.on('SIGTERM', () => {
+  log('Received SIGTERM signal, shutting down gracefully');
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  log('Received SIGINT signal, shutting down gracefully');
+  process.exit(0);
+});
+
+startServer();
