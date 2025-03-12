@@ -95,10 +95,16 @@ app.use((req, res, next) => {
 
     // Setup static serving
     log('Setting up static serving...');
-    // Use development mode with Vite for better development experience
-    if (process.env.NODE_ENV === 'development') {
-      await setupVite(app, server);
-      log('Vite setup complete');
+    if (process.env.NODE_ENV !== "production") {
+      try {
+        await setupVite(app, server);
+        log('Vite setup complete');
+      } catch (error) {
+        console.error('Failed to setup Vite:', error);
+        // Fallback to static serving if Vite setup fails
+        app.use(express.static(path.resolve(__dirname, '../dist/public')));
+        log('Fallback: Static serving enabled from dist/public');
+      }
     } else {
       // For production, serve static files from the dist directory
       app.use(express.static(path.resolve(__dirname, '../dist/public')));
