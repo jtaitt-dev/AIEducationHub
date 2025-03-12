@@ -1,11 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 export default function AIOverview() {
-  const openChatGPT = () => {
-    window.open('https://chatgpt.com/', '_blank', 'noopener,noreferrer');
-  };
-
   return (
     <div className="container py-8 space-y-8">
       <div className="max-w-3xl mx-auto text-center">
@@ -15,9 +10,6 @@ export default function AIOverview() {
         <p className="text-lg text-muted-foreground mb-8">
           Your comprehensive guide to leveraging AI tools at Neta Scientific
         </p>
-        <Button size="lg" onClick={openChatGPT}>
-          Try ChatGPT Now
-        </Button>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">

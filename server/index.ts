@@ -2,12 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { createServer } from "net";
-import { fileURLToPath } from "url";
-import path, { dirname } from "path";
-
-// Setup dirname equivalent for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import path from "path";
 
 // Function to find an available port
 const findAvailablePort = (startPort: number): Promise<number> => {
