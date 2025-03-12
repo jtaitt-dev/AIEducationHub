@@ -1,12 +1,29 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { log, setupVite } from "./vite";
+import { setupVite, serveStatic, log } from "./vite";
+import { createServer } from "net";
 import path from "path";
-import { fileURLToPath } from "url";
 
-// ESM dirname equivalent
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Function to find an available port
+const findAvailablePort = (startPort: number): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    const server = createServer();
+    server.listen(startPort, "0.0.0.0", () => {
+      const { port } = server.address() as { port: number };
+      server.close(() => resolve(port));
+    });
+
+    server.on("error", (err: any) => {
+      if (err.code === "EADDRINUSE") {
+        findAvailablePort(startPort + 1)
+          .then(resolve)
+          .catch(reject);
+      } else {
+        reject(err);
+      }
+    });
+  });
+};
 
 const app = express();
 app.use(express.json());
@@ -31,6 +48,11 @@ app.use((req, res, next) => {
       if (capturedJsonResponse) {
         logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
       }
+
+      if (logLine.length > 80) {
+        logLine = logLine.slice(0, 79) + "…";
+      }
+
       log(logLine);
     }
   });
@@ -38,13 +60,14 @@ app.use((req, res, next) => {
   next();
 });
 
-const startServer = async (retries = 3) => {
+(async () => {
   try {
     console.time('Server Startup');
     log('Starting server initialization...');
 
-    const port = 5000;
-    log(`Using port: ${port}`);
+    // Find an available port first
+    const port = await findAvailablePort(5000);
+    log(`Found available port: ${port}`);
 
     // Setup routes and error handling
     log('Registering routes...');
@@ -58,72 +81,34 @@ const startServer = async (retries = 3) => {
       res.status(status).json({ message });
     });
 
-    // Start server with explicit error handling and retry logic
-    try {
-      await new Promise<void>((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          reject(new Error('Server startup timeout'));
-        }, 5000);
-
-        server.listen({
-          port,
-          host: "0.0.0.0",
-        }, () => {
-          clearTimeout(timeout);
-          log(`Server listening on port ${port}`);
-          resolve();
-        }).on('error', (err: NodeJS.ErrnoException) => {
-          clearTimeout(timeout);
-          reject(err);
-        });
+    // Start server first
+    await new Promise<void>((resolve) => {
+      server.listen({
+        port,
+        host: "0.0.0.0",
+        reusePort: true,
+      }, () => {
+        log(`Server listening on port ${port}`);
+        resolve();
       });
+    });
 
-      // Setup Vite in development mode
-      if (process.env.NODE_ENV !== "production") {
-        log('Setting up Vite for development...');
-        await setupVite(app, server);
-        log('Vite setup complete');
-      } else {
-        // In production, serve static files from the dist directory
-        const publicPath = path.resolve(__dirname, '../dist/public');
-        log(`Setting up static serving from: ${publicPath}`);
-        app.use(express.static(publicPath));
-
-        // Add SPA fallback route for client-side routing
-        app.get('*', (req, res) => {
-          res.sendFile(path.join(publicPath, 'index.html'));
-        });
-        log('Static serving enabled');
-      }
-
-      console.timeEnd('Server Startup');
-      log('Server startup complete');
-
-    } catch (err: any) {
-      if (err.code === 'EADDRINUSE' && retries > 0) {
-        log(`Port ${port} in use, killing existing process and retrying...`);
-        // Wait briefly before retrying
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return startServer(retries - 1);
-      }
-      throw err;
+    // Setup static serving
+    log('Setting up static serving...');
+    // Use development mode with Vite for better development experience
+    if (process.env.NODE_ENV === 'development') {
+      await setupVite(app, server);
+      log('Vite setup complete');
+    } else {
+      // For production, serve static files from the dist directory
+      app.use(express.static(path.resolve(__dirname, '../dist/public')));
+      log('Static serving enabled from dist/public');
     }
 
+    console.timeEnd('Server Startup');
+    log(`Server ready on port ${port}`);
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
   }
-};
-
-// Handle cleanup
-process.on('SIGTERM', () => {
-  log('Received SIGTERM signal, shutting down gracefully');
-  process.exit(0);
-});
-
-process.on('SIGINT', () => {
-  log('Received SIGINT signal, shutting down gracefully');
-  process.exit(0);
-});
-
-startServer();
+})();
