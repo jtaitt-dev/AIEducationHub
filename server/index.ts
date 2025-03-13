@@ -3,11 +3,6 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { createServer } from "net";
 import path from "path";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 // Function to find an available port
 const findAvailablePort = (startPort: number): Promise<number> => {
@@ -101,7 +96,7 @@ app.use((req, res, next) => {
     // Setup static serving
     log('Setting up static serving...');
     // Use development mode with Vite for better development experience
-    if (process.env.NODE_ENV !== "production") {
+    if (process.env.NODE_ENV === 'development') {
       await setupVite(app, server);
       log('Vite setup complete');
     } else {
