@@ -12,65 +12,80 @@ import { Link } from "wouter";
 
 const quizQuestions = [
   {
-    question: "What is AI?",
+    question: "What is Artificial Intelligence (AI)?",
     options: [
-      "A type of computer hardware",
-      "Software that can learn and adapt",
-      "A programming language",
-      "A specific brand of computer",
+      "A type of robot that can think like humans",
+      "A branch of computer science that enables machines to learn and make decisions",
+      "A physical device that replaces human workers",
+      "A new social media platform",
     ],
     correctAnswer: 1,
     explanation: {
-      correct: "AI is software that can learn and adapt from data and experience. For example, when you use a smart email filter that learns to identify spam over time - that's AI in action!",
+      correct: "AI is a field of computer science that enables machines to learn, reason, and make decisions based on data. It is used in many industries to automate tasks and improve efficiency.",
       incorrect: "Think of AI as being like a student that learns from examples. Just as a student improves by studying patterns and examples, AI software learns from data to make better decisions over time."
     },
     relatedPath: "/learning-path#ai-basics"
   },
   {
-    question: "Which of the following is a real-world application of AI?",
+    question: "How does AI learn from data?",
     options: [
-      "Making coffee automatically",
-      "Natural language processing in virtual assistants",
-      "Basic calculator functions",
-      "Regular email sending",
+      "By reading books like humans",
+      "By processing large amounts of data and identifying patterns",
+      "By guessing until it gets the right answer",
+      "By asking people for advice",
     ],
     correctAnswer: 1,
     explanation: {
-      correct: "Virtual assistants like Siri or Alexa use AI to understand and respond to human language naturally. They can learn from conversations and improve their responses over time.",
-      incorrect: "While automatic coffee makers and calculators are useful tools, they follow fixed programming. AI applications like virtual assistants can understand context, learn, and adapt to different situations."
-    },
-    relatedPath: "/learning-path#ai-applications"
-  },
-  {
-    question: "How does AI improve business operations?",
-    options: [
-      "By replacing all human workers",
-      "By automating repetitive tasks and providing insights",
-      "By making the office look more modern",
-      "By increasing electricity consumption",
-    ],
-    correctAnswer: 1,
-    explanation: {
-      correct: "AI enhances business by handling routine tasks (like sorting emails or processing invoices) and finding patterns in data that humans might miss. This frees up people to focus on more creative and strategic work.",
-      incorrect: "AI's role isn't to replace humans but to assist them. For example, AI can analyze customer data to suggest improvements, while humans make the final strategic decisions."
-    },
-    relatedPath: "/learning-path#ai-applications"
-  },
-  {
-    question: "What is machine learning in AI?",
-    options: [
-      "Teaching robots to walk",
-      "Programming computers manually",
-      "Systems learning from data and experience",
-      "Installing new software updates",
-    ],
-    correctAnswer: 2,
-    explanation: {
-      correct: "Machine learning is like teaching by example. Instead of writing specific rules, we show the AI many examples, and it learns patterns. For instance, showing an AI thousands of photos of cats and dogs helps it learn to distinguish between them.",
-      incorrect: "Machine learning isn't about manual programming or simple updates. It's about systems that improve automatically through experience, like how a music recommendation system gets better at suggesting songs the more you use it."
+      correct: "AI learns by analyzing large amounts of data and finding patterns. This process is called machine learning (ML), which allows AI to make predictions and improve over time.",
+      incorrect: "While humans learn by reading and asking questions, AI learns through data analysis and pattern recognition. It processes information mathematically rather than through human-like comprehension."
     },
     relatedPath: "/learning-path#ml-intro"
   },
+  {
+    question: "Which of these is an example of AI in daily life?",
+    options: [
+      "A self-checkout machine at a grocery store",
+      "Google Maps giving you the fastest route",
+      "A coffee machine that brews coffee",
+      "A flashlight turning on and off",
+    ],
+    correctAnswer: 1,
+    explanation: {
+      correct: "Google Maps uses AI to analyze traffic data, predict delays, and suggest the best routes based on real-time conditions. It continuously learns and adapts to changing traffic patterns.",
+      incorrect: "While self-checkout machines and coffee makers are automated, they follow fixed programming. True AI, like Google Maps, learns and adapts to changing conditions in real-time."
+    },
+    relatedPath: "/learning-path#ai-applications"
+  },
+  {
+    question: "What makes AI different from traditional computer programs?",
+    options: [
+      "AI can learn and improve on its own, while traditional programs follow fixed rules",
+      "AI is slower than traditional programs",
+      "AI only works on smartphones",
+      "AI replaces all human jobs",
+    ],
+    correctAnswer: 0,
+    explanation: {
+      correct: "Traditional programs follow predefined rules, while AI analyzes data, learns from experience, and improves over time. This makes AI more adaptable and powerful in solving complex problems.",
+      incorrect: "AI's key difference is its ability to learn and adapt. Unlike traditional programs that follow fixed rules, AI systems can improve their performance through experience and data analysis."
+    },
+    relatedPath: "/learning-path#ai-basics"
+  },
+  {
+    question: "What is the purpose of AI-powered chatbots like ChatGPT?",
+    options: [
+      "To replace human conversation completely",
+      "To assist users by providing information and automating responses",
+      "To control all websites on the internet",
+      "To watch and listen to everything users do",
+    ],
+    correctAnswer: 1,
+    explanation: {
+      correct: "AI-powered chatbots like ChatGPT help answer questions, automate customer support, and provide useful recommendations, making interactions faster and more efficient.",
+      incorrect: "Chatbots are designed to assist and enhance human work, not replace it entirely. They help automate routine tasks while leaving complex decisions to humans."
+    },
+    relatedPath: "/learning-path#ai-applications"
+  }
 ];
 
 interface ResultsCardProps {
