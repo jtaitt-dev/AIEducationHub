@@ -3,6 +3,12 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { createServer } from "net";
 import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+// Define __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Function to find an available port
 const findAvailablePort = (startPort: number): Promise<number> => {
@@ -28,6 +34,11 @@ const findAvailablePort = (startPort: number): Promise<number> => {
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Add health check endpoint for cloud run
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
 
 // Request logging middleware with performance tracking
 app.use((req, res, next) => {
