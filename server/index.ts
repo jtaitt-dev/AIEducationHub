@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Add health check endpoint for cloud run
-app.get('/', (req, res) => {
+app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
