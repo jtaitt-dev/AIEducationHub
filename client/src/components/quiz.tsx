@@ -287,18 +287,7 @@ export function Quiz() {
       }
       setIsCorrect(correct);
       setShowResult(true);
-
-      // Add a delay before moving to the next question
-      setTimeout(() => {
-        if (currentQuestion < quizQuestions.length - 1) {
-          setCurrentQuestion(prev => prev + 1);
-          setSelectedOption(null);
-          setShowResult(false);
-        } else {
-          setQuizCompleted(true);
-        }
-        setIsSubmitting(false);
-      }, 3000); // Reduced from 8000ms to 3000ms to prevent long waits
+      setIsSubmitting(false);
 
     } catch (error) {
       setIsSubmitting(false);
@@ -307,6 +296,16 @@ export function Quiz() {
         description: "Please try again in a moment",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestion < quizQuestions.length - 1) {
+      setCurrentQuestion(prev => prev + 1);
+      setSelectedOption(null);
+      setShowResult(false);
+    } else {
+      setQuizCompleted(true);
     }
   };
 
@@ -430,14 +429,28 @@ export function Quiz() {
               )}
             </AnimatePresence>
 
-            <Button
-              onClick={handleSubmit}
-              className="w-full mt-6"
-              size="lg"
-              disabled={selectedOption === null || showResult || isSubmitting}
-            >
-              {isSubmitting ? "Submitting..." : "Submit Answer"}
-            </Button>
+            {showResult ? (
+              <Button
+                onClick={handleNextQuestion}
+                className="w-full mt-6"
+                size="lg"
+              >
+                {currentQuestion < quizQuestions.length - 1 ? (
+                  <>Next Question <ArrowRight className="ml-2 w-4 h-4" /></>
+                ) : (
+                  "See Results"
+                )}
+              </Button>
+            ) : (
+              <Button
+                onClick={handleSubmit}
+                className="w-full mt-6"
+                size="lg"
+                disabled={selectedOption === null || isSubmitting}
+              >
+                {isSubmitting ? "Submitting..." : "Submit Answer"}
+              </Button>
+            )}
           </motion.div>
         </AnimatePresence>
       </CardContent>
